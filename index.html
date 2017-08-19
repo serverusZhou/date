@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="description" id="description" content="约吧,分享" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="renderer" content="webkit" />
+  <meta name="apple-touch-fullscreen" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <title>约吧</title>
+  <link rel="stylesheet" href="css/index.css" />
+</head>
+
+<body class="max-content">
+  <!-- 主窗口 -->
+  <div class="max-content has-download-app has-footer" id="main-body"></div>
+
+  <script id="home" type="text/html">
+    <!-- 下载饭蛋app -->
+    <div class="download-app">
+      <div class="download-des pull-left ib_dis_content">
+        <img src="img/logo_fandien_h5.png" />
+        <span>下载饭蛋APP</span>
+      </div>
+      <div class="download-now pull-right" fd-click="downloadApp(perMoney,'good')">立即下载</div>
+    </div>
+    <!-- 广告部分 -->
+    <header class="adv"></header>
+    <!-- 主体部分 -->
+    <div class="main-body">
+      <div class="count-down">
+        <p>距离拼单结束还有</p>
+        <div class="remain-time ib_dis_content" id="time-count-down"></div>
+      </div>
+      <div class="share-people">
+        <div class="share-people-pic ib_dis_content">
+          <!-- 循环头像 -->
+          {{each headCuts}}
+            <div class="pic-wap {{$index==0?'initiator':''}}">
+              <div class="head-short-cut">
+                <img src="{{$value.imgUrl}}" />
+              </div>
+            </div>
+          {{/each}}
+        </div>
+        <div class="share-detail">
+          <p><span class="per-money">￥{{perMoney}}/人</span>{{totalPerson}}人拼单·已拼{{alreadyPaid}}人</p>
+          <p>拼单成功后您将得到奖励金<span class="reward-money">¥{{rewardMoney}}</span>。</p>
+        </div>
+        <div class="order-detail">
+          <div class="order-detail-title ib_dis_content">
+            <span class="opened">展开详情</span>
+          </div>
+          <div class="order-detail-list">
+            <div class="detail-part">
+                <p class="detail-part-title">商家信息</p>
+                <div class="detail-spacies">
+                    <p></p>
+                    <p></p>
+                </div>
+            </div>
+            <div class="detail-part">
+                <p class="detail-part-title">赏味菜品</p>
+                <div class="detail-spacies">
+                    <p></p>
+                    <p></p>
+                </div>
+            </div>
+            <div class="detail-part">
+                <p class="detail-part-title">订单信息</p>
+                <div class="detail-spacies">
+                    <p></p>
+                    <p></p>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <footer class="accep-invitation">
+        接受邀请
+      </footer>
+  </script>
+  <script id="wechatpay" type="text/html">
+    <div>微信支付页面</div>
+  </script>
+  <script src="plugins/require.js" data-main="handle/h5"></script>
+</body>
+
+</html>

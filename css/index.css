@@ -1,0 +1,71 @@
+@charset "utf-8";
+/* CSS Document */
+*{padding:0;margin:0 auto;font-family:"Microsoft YaHei","微软雅黑";word-break:break-all;}
+body,html{width:100%;overflow-x:hidden;position:relative;font-size:14px;background-color: #fff;}
+a{text-decoration:none;cursor:pointer;}
+.pull-left{float:left;}
+.pull-right{float: right;}
+/*垂直居中*/
+.ib_dis_content:before{content: "";height:100%;display: inline-block;vertical-align: middle;}
+.ib_dis_content>span{display: inline-block;vertical-align: middle;}
+@media only screen and (max-width: 750px), only screen and (max-device-width:750px) {html,body{font-size:20px;}}
+@media only screen and (max-width: 720px), only screen and (max-device-width:720px) {html,body{font-size:19.2px;}}
+@media only screen and (max-width: 640px), only screen and (max-device-width:640px) {html,body{font-size:17.07px;}}
+@media only screen and (max-width: 600px), only screen and (max-device-width:600px) {html,body{font-size:16px;}}
+@media only screen and (max-width: 540px), only screen and (max-device-width:540px) {html,body{font-size:14.4px;}}
+@media only screen and (max-width: 480px), only screen and (max-device-width:480px) {html,body{font-size:12.8px;}}
+@media only screen and (max-width: 414px), only screen and (max-device-width:414px) {html,body{font-size:11.04px;}}
+@media only screen and (max-width: 400px), only screen and (max-device-width:400px) {html,body{font-size:10.67px;}}
+@media only screen and (max-width: 375px), only screen and (max-device-width:375px) {html,body{font-size:10px;}}
+@media only screen and (max-width: 360px), only screen and (max-device-width:360px) {html,body{font-size:9.6px;}}
+@media only screen and (max-width: 320px), only screen and (max-device-width:320px) {html,body{font-size:8.53px;}}
+@media only screen and (max-width: 240px), only screen and (max-device-width:240px) {html,body{font-size:6.4px;}}
+
+
+.max-content{max-width:640px;margin:0 auto;overflow-x:hidden;}
+/* 有下载app的样式，没有时直接remove掉has-download-app */
+.max-content.has-download-app{padding-top:4rem;}
+.max-content.has-footer{padding-bottom:5rem;}
+.max-content>div.download-app{display: none;}
+.max-content.has-download-app>div.download-app{width:100%;height:2.6rem;background-color: #db3644;position: fixed;z-index: 11;top:0;left: 0;padding:.7rem 0;max-width: 640px;left:0;right:0;display: block;}
+.max-content.has-download-app>div.download-app>div.download-des{padding-left:1.2rem;height:2.6rem;line-height: 2.6rem;}
+.max-content.has-download-app>div.download-app>div.download-des>img{width:2rem;display: inline-block;vertical-align: middle;}
+.max-content.has-download-app>div.download-app>div.download-des>span{padding-left:1rem;color: #fff;font-size:1.2rem;display: inline-block;vertical-align: middle;}
+.max-content.has-download-app>div.download-app>div.download-now{width:9.7rem;height:2.6rem;background-color: #fff;color:#DB666E;line-height: 2.6rem;text-align: center;border-radius:3px;margin-right:.3rem;font-size:1.2rem;}
+
+/*大图部分*/
+.adv{width:100%;height:28.9rem;background: url(../img/adv_banner.png) no-repeat;background-size: 100%;}
+/*主体部分*/
+
+/*倒计时部分*/
+.count-down>p{height:2.8rem;line-height: 2.8rem;text-align: center;color:#D0021B;font-size: 2rem;font-weight: 700;margin:.6rem 0;}
+.remain-time{width:24.6rem;height:4.2rem;background: url(../img/count_down_bg.png);background-size: 100%;line-height: 4.2rem;text-align: center;}
+.remain-time>div.num{width:1.9rem;height:2.3rem;display: inline-block;background-color: #fff;border-radius: 3px;vertical-align: middle;font-size: 2rem;color:#D0021B;line-height: 2.3rem;text-align: center;font-weight: 700;}
+.remain-time>span{color:#fff;font-size: 1.8rem;}
+
+.share-people{}
+.share-people-pic{text-align: center;margin: 1.2rem 0;}
+.share-people-pic>div.pic-wap{height:4.4rem;width: 4.4rem;display: inline-block;vertical-align: middle;}
+.share-people-pic>div.pic-wap>div.head-short-cut{width:3rem;height:3rem;border-radius:50%;overflow: hidden;margin:.7rem;}
+.share-people-pic>div.pic-wap>div.head-short-cut>img{width:100%;height:100%;}
+/* 发起人样式 */
+.share-people-pic>div.pic-wap.initiator{position: relative;}
+.share-people-pic>div.pic-wap.initiator:before{content:"发起人";display: block;position: absolute;left: 0;top:0;width: 3rem;text-align: center;font-size: .9rem;color:#fff;height: 1.3rem;line-height: 1.3rem;z-index: 11;background-color: #D0021B;}
+/*详情*/
+.share-detail>p{font-size: 1.4rem;text-align: center;line-height: 2.4rem;height:2.4rem;color:#666;}
+.share-detail>p:last-child{color:#333;}
+.share-detail>p>span.per-money{font-size:2rem;color:#D0021B;}
+.share-detail>p>span.reward-money{color:#D0021B;}
+
+/*接受邀请*/
+.accep-invitation{width: 100%;height:5rem;line-height: 5rem;text-align: center;background-color: #D0021B;color:#fff;position: fixed;left:0;right:0;max-width: 640px;bottom:0;font-size: 1.4rem;z-index: 11px;}
+
+/*邀请订单详情*/
+.order-detail-title{text-align: center;height: 4rem;line-height: 4rem;}
+.order-detail-title>span{color:#CB202D;font-size: 1.4rem;line-height: 4rem;}
+.order-detail-title>span:after{content:"";display: inline-block;width:1.8rem;height:1.5rem;}
+.order-detail-title>span.closed:after{background: url(../img/pulldown.png) no-repeat;background-size: 1.3rem 1.3rem;background-position: bottom right;}
+.order-detail-title>span.opened:after{background: url(../img/pullup.png) no-repeat;background-size: 1.3rem 1.3rem;background-position: bottom right;}
+
+.order-detail-list{border:1px #999 dotted;width:33rem;margin:0 auto;}
+.detail-part-title{width:30.4rem;height:5.4rem;font-size:1.5rem;text-align: center;color: #333;margin:0 auto;line-height: 5.4rem;border-bottom: 1px #E0E0E0 solid;}
