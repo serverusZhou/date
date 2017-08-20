@@ -47,12 +47,14 @@ define(['jquery','staticPath','weixinShare','promise','artTemplate','config','wa
 				var argus = $(ele).attr("fd-click").split("(")[1].split(")")[0].split(",");
 				var func = $(ele).attr("fd-click").split("(")[0];
 				var realArgusStr = [];
-				$.each(argus,function(index,argu){
-					if(argu.indexOf("'") > -1 ||argu.indexOf("\"") > -1)
-						realArgusStr.push(argu);
-					else
-						realArgusStr.push("data."+argu);
-				})
+				if(argus != ""){
+					$.each(argus,function(index,argu){
+						if(argu.indexOf("'") > -1 ||argu.indexOf("\"") > -1)
+							realArgusStr.push(argu);
+						else
+							realArgusStr.push("data."+argu);
+					})
+				}
 				eval("methods."+func+"("+realArgusStr.toString()+")");
 			})
 		})

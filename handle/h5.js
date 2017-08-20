@@ -52,11 +52,22 @@ require(['jquery','service','promise'], function($,Service,promise){
 				methods : {
 					"downloadApp":function(){
 						
+					},
+					"goWeChatPayPage":function(){
+						location.href="#wechatPay";
 					}
 				}
 			},
 			"wechatPay" : {
-
+				data : {
+					
+				},
+				init : function(){
+					return wechatPayPageInit(service,this.data);
+				},
+				after : function(){
+					wechatPayInitAfter(service,this.data);
+				},
 			}
 		}
 		return function(){
@@ -72,6 +83,17 @@ require(['jquery','service','promise'], function($,Service,promise){
 	var homeInitAfter =  function(service,data){
 		service.setCountDown();
 	}
+
+	var wechatPayPageInit = function (service,data){
+		var p=new promise.Promise();
+		p.done(data,"success");
+		return p
+	}
+
+	var wechatPayInitAfter =  function(service,data){
+		
+	}
+
 	/*
 		*@explain页面启动
 	*/

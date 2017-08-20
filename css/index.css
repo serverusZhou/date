@@ -5,6 +5,7 @@ body,html{width:100%;overflow-x:hidden;position:relative;font-size:14px;backgrou
 a{text-decoration:none;cursor:pointer;}
 .pull-left{float:left;}
 .pull-right{float: right;}
+
 /*垂直居中*/
 .ib_dis_content:before{content: "";height:100%;display: inline-block;vertical-align: middle;}
 .ib_dis_content>span{display: inline-block;vertical-align: middle;}
@@ -21,6 +22,11 @@ a{text-decoration:none;cursor:pointer;}
 @media only screen and (max-width: 320px), only screen and (max-device-width:320px) {html,body{font-size:8.53px;}}
 @media only screen and (max-width: 240px), only screen and (max-device-width:240px) {html,body{font-size:6.4px;}}
 
+.has-icon{padding-left:3rem;position: relative;height:5.4rem;line-height: 5.4rem;}
+.has-icon>span{display: inline-block;vertical-align: middle;line-height: 2.2rem;}
+.has-icon:before{content: "";position: absolute;z-index: 11;left: 0;top:0;width: 3rem;height: 100%;}
+.has-icon.icon-home:before{content: "";background: url(../img/icon_restaurant.png) no-repeat;background-size: 2rem;background-position: center center;}
+.has-icon.icon-position:before{content: "";background: url(../img/icon_location.png) no-repeat;background-size: 2rem;background-position: center center;}
 
 .max-content{max-width:640px;margin:0 auto;overflow-x:hidden;}
 /* 有下载app的样式，没有时直接remove掉has-download-app */
@@ -67,5 +73,13 @@ a{text-decoration:none;cursor:pointer;}
 .order-detail-title>span.closed:after{background: url(../img/pulldown.png) no-repeat;background-size: 1.3rem 1.3rem;background-position: bottom right;}
 .order-detail-title>span.opened:after{background: url(../img/pullup.png) no-repeat;background-size: 1.3rem 1.3rem;background-position: bottom right;}
 
-.order-detail-list{border:1px #999 dotted;width:33rem;margin:0 auto;}
+.order-detail-list{border:1px #999 dotted;width:33rem;margin:0 auto 3rem;padding-bottom:2.5rem;}
 .detail-part-title{width:30.4rem;height:5.4rem;font-size:1.5rem;text-align: center;color: #333;margin:0 auto;line-height: 5.4rem;border-bottom: 1px #E0E0E0 solid;}
+.detail-spacies{width:30.4rem;margin: 0 auto;}
+.detail-spacies>p{font-size:1.4rem;border-bottom: 1px #E0E0E0 solid;}
+.detail-spacies>p.all-letters{line-height: 2.2rem;padding:.7rem .5rem;}
+.detail-spacies>p.form-like{padding:0 .5rem;height:5.4rem;line-height: 5.4rem;}
+.detail-spacies>p.form-like>span{height: 5.4rem;line-height: 5.4rem;text-align: left;width:11rem;display: inline-block;}
+.detail-spacies>p.form-like>span:first-child{width:11rem;}
+/*付款页面*/
+.order-detail-list.wechat-pay-detail{border:none;padding-bottom:0;margin:0 auto;}

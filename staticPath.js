@@ -1,4 +1,4 @@
-define(['./config'],function(config){
+define(['config'],function(config){
 	function getAllPath(){
 		var domain=config.domain+"/exiaoxplatf/v1/";
 		//var filedomain=config.domain+"/data/platform/";
