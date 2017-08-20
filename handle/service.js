@@ -167,10 +167,11 @@ define(['jquery','staticPath','weixinShare','promise','artTemplate','config','wa
 	}
 
 	//倒计时
-	H5Funcs.prototype.setCountDown=function(){
+	H5Funcs.prototype.setCountDown=function(time,id,type){
 		new CountDown({
-			"time":"1990-09-05",
-			"id":"time-count-down",
+			"time":time,
+			"id":id,
+			"type":type
 		});
 	}
 

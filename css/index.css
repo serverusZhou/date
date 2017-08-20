@@ -64,7 +64,7 @@ a{text-decoration:none;cursor:pointer;}
 .share-detail>p>span.reward-money{color:#D0021B;}
 
 /*接受邀请*/
-.accep-invitation{width: 100%;height:5rem;line-height: 5rem;text-align: center;background-color: #D0021B;color:#fff;position: fixed;left:0;right:0;max-width: 640px;bottom:0;font-size: 1.4rem;z-index: 11px;}
+.accep-invitation{width: 100%;height:5rem;line-height: 5rem;text-align: center;background-color: #D0021B;color:#fff;position: fixed;left:0;right:0;max-width: 640px;bottom:0;font-size: 1.4rem;z-index: 1111;}
 
 /*邀请订单详情*/
 .order-detail-title{text-align: center;height: 4rem;line-height: 4rem;}
@@ -74,7 +74,7 @@ a{text-decoration:none;cursor:pointer;}
 .order-detail-title>span.opened:after{background: url(../img/pullup.png) no-repeat;background-size: 1.3rem 1.3rem;background-position: bottom right;}
 
 .order-detail-list{border:1px #999 dotted;width:33rem;margin:0 auto 3rem;padding-bottom:2.5rem;}
-.detail-part-title{width:30.4rem;height:5.4rem;font-size:1.5rem;text-align: center;color: #333;margin:0 auto;line-height: 5.4rem;border-bottom: 1px #E0E0E0 solid;}
+.detail-part-title{width:30.4rem;height:5.4rem;font-size:1.5rem;text-align: center;color: #333;margin:0 auto;line-height: 5.4rem;border-bottom: 1px #E0E0E0 solid;font-weight: 700;}
 .detail-spacies{width:30.4rem;margin: 0 auto;}
 .detail-spacies>p{font-size:1.4rem;border-bottom: 1px #E0E0E0 solid;}
 .detail-spacies>p.all-letters{line-height: 2.2rem;padding:.7rem .5rem;}
@@ -83,3 +83,9 @@ a{text-decoration:none;cursor:pointer;}
 .detail-spacies>p.form-like>span:first-child{width:11rem;}
 /*付款页面*/
 .order-detail-list.wechat-pay-detail{border:none;padding-bottom:0;margin:0 auto;}
+.detail-spacies>p.form-like>input[type="text"].single{width:100%;height:100%;border:none;outline: none;}
+
+.go-wecart-pay{width: 100%;height:5rem;line-height: 5rem;text-align: right;background-color: #fff;color:#fff;position: fixed;left:0;right:0;max-width: 640px;bottom:0;font-size: 1.4rem;z-index: 1111;}
+.count-total{display: inline-block;height:5rem;line-height: 5rem;text-align: right;color:#D0021B;padding-right: .9rem;font-size: 1.5rem;}
+.chat-pay-btn{display: inline-block;width:8rem;background-color: #3A8D1C;height:5rem;line-height: 5rem;font-size: 1.5rem;color:#fff;padding-left:5rem;position: relative;text-align: left;}
+.chat-pay-btn:before{content: "";position:absolute;width:5rem;height:5rem;background: url(../img/icon_wechat_pay.png) no-repeat;background-size: 2.36rem 2.06rem;background-position: 2rem 1.2rem;top:0;left:0;}

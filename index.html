@@ -84,6 +84,15 @@
   <script id="wechatpay" type="text/html">
     <div class="order-detail">
       <div class="order-detail-list wechat-pay-detail">
+        <div class="count-down">
+          <div class="go-wecart-pay ib_dis_content" id="pay-time-count-down"></div>
+          <p>请在提示时间内付款</p>
+        </div>
+        <div class="detail-part">
+            <div class="detail-spacies">                
+                <p class="form-like"><input type="text" class="single" placeholder="输入手机号" /></p>
+            </div>
+        </div>
         <div class="detail-part">
             <p class="detail-part-title">商家信息</p>
             <div class="detail-spacies">
@@ -106,6 +115,10 @@
         </div>
       </div>
     </div>
+    <footer class="go-wecart-pay" fd-click="goWeChatPayPage()">
+        <div class="count-total">总计：¥50.00</div>
+        <div class="chat-pay-btn">微信支付</div>
+    </footer>
   </script>
   <script src="plugins/require.js" data-main="handle/h5"></script>
 </body>

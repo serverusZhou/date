@@ -81,7 +81,7 @@ require(['jquery','service','promise'], function($,Service,promise){
 		return p
 	}
 	var homeInitAfter =  function(service,data){
-		service.setCountDown();
+		service.setCountDown("1990-09-05","time-count-down","colorful");
 	}
 
 	var wechatPayPageInit = function (service,data){
@@ -91,7 +91,7 @@ require(['jquery','service','promise'], function($,Service,promise){
 	}
 
 	var wechatPayInitAfter =  function(service,data){
-		
+		service.setCountDown("1990-09-05","pay-time-count-down","colorful");
 	}
 
 	/*
