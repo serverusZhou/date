@@ -9,11 +9,15 @@ define(function(){
 		var pageMap={
 			"home":{
 				"contentId":"main-body",
-				"templateId":"home"
+				"templateId":"home",
 			},
 			"wechatPay":{
 				"contentId":"main-body",
 				"templateId":"wechatpay"
+			},
+			"404":{
+				"contentId":"main-body",
+				"templateId":"notfound",
 			}
 		}
 		/*
@@ -24,11 +28,18 @@ define(function(){
 		*項目域名地址
 		*/
 		var domain="http://192.168.0.199:8080";
+
+		/*
+		*判断是否只可以在微信登录
+		*/
+		var onlyWeChat = true;
+
 		return function(){
 			return {
-				wxDebug:wxDebug,
-				domain:domain,
-				pageMap:pageMap
+				wxDebug : wxDebug,
+				domain : domain,
+				pageMap : pageMap,
+				onlyWeChat : onlyWeChat
 			}
 		}
 	}

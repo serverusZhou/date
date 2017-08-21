@@ -55,6 +55,17 @@ require(['jquery','service','promise'], function($,Service,promise){
 					},
 					"goWeChatPayPage":function(){
 						location.href="#wechatPay";
+					},
+					"showDetails":function(){
+						if($("#is-show-details-btn").hasClass("opened")){
+							$("#is-show-details-btn").attr("class","closed");
+							$("#is-show-details-btn").html("展开详情");
+							$("#order-details").fadeOut(300);
+						}else{
+							$("#is-show-details-btn").attr("class","opened");
+							$("#is-show-details-btn").html("收起详情");
+							$("#order-details").fadeIn(300);
+						}
 					}
 				}
 			},
@@ -91,12 +102,12 @@ require(['jquery','service','promise'], function($,Service,promise){
 	}
 
 	var wechatPayInitAfter =  function(service,data){
-		service.setCountDown("1990-09-05","pay-time-count-down","colorful");
+		service.setCountDown("1990-09-05","pay-time-count-down","common");
 	}
 
 	/*
 		*@explain页面启动
 	*/
-	var service=new Service(pagesSetting);
+	new Service(pagesSetting);
 })
 

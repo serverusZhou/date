@@ -12,6 +12,9 @@ define(['jquery','staticPath','weixinShare','promise','artTemplate','config','wa
 	*/
 	H5Funcs.prototype.pageInit=function(){
 		var self = this;
+		if(!self.enterPageFilter())//是否满足页面的过滤条件（微信浏览）
+		   return
+		self.wxShare("约吧","一场无压力的约会之旅","");//调用微信分享
 		self.setUpPage();
 		self.pageChange();
 	}
@@ -23,6 +26,8 @@ define(['jquery','staticPath','weixinShare','promise','artTemplate','config','wa
 		var pageTitle = self.getPageName()||"home";
 		var pageObj = config.pageMap[pageTitle];
 		if(pageObj==undefined){
+			alert(config.pageMap["404"].templateId);
+			self.renderPage(config.pageMap["404"].contentId,config.pageMap["404"].templateId,{},{});
 			return
 		}
 		self.pagesData[pageTitle].init().then(function(){
@@ -32,7 +37,7 @@ define(['jquery','staticPath','weixinShare','promise','artTemplate','config','wa
 			})
 			self.pagesData[pageTitle].after();
 		},function(){
-			alert("错啦！");
+
 		})
 	}
 
@@ -132,7 +137,7 @@ define(['jquery','staticPath','weixinShare','promise','artTemplate','config','wa
 	}
 
 	 /*
-		*@explain 獲取瀏覽器類型
+		*@explain 获取浏览器类型
 	*/
 	H5Funcs.prototype.getAgentVersion=function(){
 		var self=this;
@@ -153,6 +158,26 @@ define(['jquery','staticPath','weixinShare','promise','artTemplate','config','wa
         };
 
 	 };
+	 /*
+		*@explain 进入页面的过滤
+	*/
+	H5Funcs.prototype.enterPageFilter = function(){
+		var self = this;
+		return self.filterWecart();
+	}
+	/*
+		*@explain 非微信浏览器过滤
+	*/
+	H5Funcs.prototype.filterWecart = function(){
+		var self = this;
+		var notWechatBowerHtml = "<p>抱歉：</p>\
+								  <p>此页面需在微信中打开</p>";
+		// if(!self.getAgentVersion().weixin){
+		// 	$("body").html(notWechatBowerHtml);
+		// 	return false
+		// }
+		return true
+	}
 
 	//获取页面传递的参数
 	H5Funcs.prototype.getQueryString=function(name){

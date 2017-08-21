@@ -51,9 +51,9 @@
         </div>
         <div class="order-detail">
           <div class="order-detail-title ib_dis_content">
-            <span class="opened">展开详情</span>
+            <span class="closed" fd-click="showDetails()" id="is-show-details-btn">展开详情</span>
           </div>
-          <div class="order-detail-list">
+          <div class="order-detail-list" id="order-details" style="display:none;">
             <div class="detail-part">
                 <p class="detail-part-title">商家信息</p>
                 <div class="detail-spacies">
@@ -81,11 +81,12 @@
         接受邀请
       </footer>
   </script>
+  <!-- 跳转微信支付详情页面 -->
   <script id="wechatpay" type="text/html">
     <div class="order-detail">
       <div class="order-detail-list wechat-pay-detail">
-        <div class="count-down">
-          <div class="go-wecart-pay ib_dis_content" id="pay-time-count-down"></div>
+        <div class="wecharpay-count-down">
+          <div class="wecharpay-remain-time ib_dis_content" id="pay-time-count-down"></div>
           <p>请在提示时间内付款</p>
         </div>
         <div class="detail-part">
@@ -119,6 +120,14 @@
         <div class="count-total">总计：¥50.00</div>
         <div class="chat-pay-btn">微信支付</div>
     </footer>
+  </script>
+  <!-- 404页面 -->
+  <script id="notfound" type="text/html">
+    <div class="content-404">
+      <p class="user-name-404">亲爱的用户：</p>
+      <p class="explain-404">&nbsp;&nbsp;&nbsp;&nbsp;十分抱歉，您的页面飞向火星去了，我们正在准备飞船前往寻找，请您不要着急。在此期间你可以到<a href="#">活动页面</a>去看看，我们为您准备了足够的惊喜。</p>
+      <p class="sign-404">--约吧404机动战队</p>
+    </div>
   </script>
   <script src="plugins/require.js" data-main="handle/h5"></script>
 </body>

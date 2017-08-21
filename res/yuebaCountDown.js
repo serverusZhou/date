@@ -23,10 +23,11 @@ define(['jquery'],function($){
 			var self = this;
 			var id =  settings.id;
 			var wholeTime =  settings.time;
+			var path = location.href;
 			$("#"+id).html(countDownHtml);
 			var rightTime = wholeTime;
 			var conutInte = setInterval(function(){
-				if(rightTime === false)
+				if(rightTime === false || path != location.href)
 				   clearInterval(conutInte);
 				else
 				   rightTime = self.getMinusOneSeconeTime(rightTime);

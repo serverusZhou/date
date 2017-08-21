@@ -1,7 +1,7 @@
 @charset "utf-8";
 /* CSS Document */
 *{padding:0;margin:0 auto;font-family:"Microsoft YaHei","微软雅黑";word-break:break-all;}
-body,html{width:100%;overflow-x:hidden;position:relative;font-size:14px;background-color: #fff;}
+body,html{width:100%;overflow-x:hidden;position:relative;font-size:17.07px;background-color: #fff;}
 a{text-decoration:none;cursor:pointer;}
 .pull-left{float:left;}
 .pull-right{float: right;}
@@ -9,8 +9,9 @@ a{text-decoration:none;cursor:pointer;}
 /*垂直居中*/
 .ib_dis_content:before{content: "";height:100%;display: inline-block;vertical-align: middle;}
 .ib_dis_content>span{display: inline-block;vertical-align: middle;}
-@media only screen and (max-width: 750px), only screen and (max-device-width:750px) {html,body{font-size:20px;}}
-@media only screen and (max-width: 720px), only screen and (max-device-width:720px) {html,body{font-size:19.2px;}}
+/* @media only screen and (max-width: 750px), only screen and (max-device-width:750px) {html,body{font-size:20px;}}
+@media only screen and (max-width: 720px), only screen and (max-device-width:720px) {html,body{font-size:19.2px;}} */
+
 @media only screen and (max-width: 640px), only screen and (max-device-width:640px) {html,body{font-size:17.07px;}}
 @media only screen and (max-width: 600px), only screen and (max-device-width:600px) {html,body{font-size:16px;}}
 @media only screen and (max-width: 540px), only screen and (max-device-width:540px) {html,body{font-size:14.4px;}}
@@ -68,10 +69,10 @@ a{text-decoration:none;cursor:pointer;}
 
 /*邀请订单详情*/
 .order-detail-title{text-align: center;height: 4rem;line-height: 4rem;}
-.order-detail-title>span{color:#CB202D;font-size: 1.4rem;line-height: 4rem;}
-.order-detail-title>span:after{content:"";display: inline-block;width:1.8rem;height:1.5rem;}
-.order-detail-title>span.closed:after{background: url(../img/pulldown.png) no-repeat;background-size: 1.3rem 1.3rem;background-position: bottom right;}
-.order-detail-title>span.opened:after{background: url(../img/pullup.png) no-repeat;background-size: 1.3rem 1.3rem;background-position: bottom right;}
+.order-detail-title>span{color:#CB202D;font-size: 1.4rem;line-height: 4rem;position: relative;padding-right: 1.8rem;}
+.order-detail-title>span:after{content:"";display: block;width:1.3rem;height:4rem; position: absolute;z-index: 11;top:0;right: 0;}
+.order-detail-title>span.closed:after{background: url(../img/pulldown.png) no-repeat;background-size: 1.3rem 1rem;background-position: center center;}
+.order-detail-title>span.opened:after{background: url(../img/pullup.png) no-repeat;background-size: 1.3rem 1rem;background-position: center center;}
 
 .order-detail-list{border:1px #999 dotted;width:33rem;margin:0 auto 3rem;padding-bottom:2.5rem;}
 .detail-part-title{width:30.4rem;height:5.4rem;font-size:1.5rem;text-align: center;color: #333;margin:0 auto;line-height: 5.4rem;border-bottom: 1px #E0E0E0 solid;font-weight: 700;}
@@ -89,3 +90,12 @@ a{text-decoration:none;cursor:pointer;}
 .count-total{display: inline-block;height:5rem;line-height: 5rem;text-align: right;color:#D0021B;padding-right: .9rem;font-size: 1.5rem;}
 .chat-pay-btn{display: inline-block;width:8rem;background-color: #3A8D1C;height:5rem;line-height: 5rem;font-size: 1.5rem;color:#fff;padding-left:5rem;position: relative;text-align: left;}
 .chat-pay-btn:before{content: "";position:absolute;width:5rem;height:5rem;background: url(../img/icon_wechat_pay.png) no-repeat;background-size: 2.36rem 2.06rem;background-position: 2rem 1.2rem;top:0;left:0;}
+
+/*微信支付倒计时部分*/
+.wecharpay-count-down>p{height:2rem;line-height: 2rem;text-align: center;color:#999;font-size: 1.4rem;}
+.wecharpay-remain-time{width:24.6rem;height:2.1rem;background-size: 100%;line-height: 2.1rem;text-align: center;margin-bottom: .2rem;}
+.wecharpay-remain-time>div.num{height:2.1rem;display: inline-block;background-color: #fff;border-radius: 3px;vertical-align: middle;font-size: 1.8rem;color:#333;line-height: 2.1rem;text-align: center;}
+.wecharpay-remain-time>span{color:#333;font-size: 1.8rem;}
+.user-name-404{font-size:1.8rem;height:5rem;line-height: 5rem;}
+.content-404{width:80%;margin:0 auto;font-size: 1.4rem;line-height: 2rem;}
+.sign-404{text-align: right; font-size: 1.8rem;}
