@@ -117,6 +117,11 @@ define(['jquery','staticPath','weixinShare','promise','artTemplate','config','wa
 		})
 	}
 	/*
+		*@explain進行配置微信支付
+	*/
+	
+
+	/*
 	*保存評論内容
 	*/
 	H5Funcs.prototype.saveCommentInfo=function(articleId,content,creator,Uid,AccessToken){
