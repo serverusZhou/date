@@ -8,11 +8,13 @@
 			 "pt": "../res/pt",
 			 "promise":"../plugins/promise.min",
 			 "weixinShare":"../res/weixinShare",
+			 "weixinPay":"../res/weixinpay",
 			 "staticPath":"../staticPath",
 			 "config":"../config",
 			 "sha1":"../plugins/sha1",
 			 "watch":"../plugins/watch.min",
 			 "countDown":"../res/yuebaCountDown",
+			 "weixin": "../plugins/jweixin-1.0.0",
 		  },
 	shim:{
 	    'jquery.toJSON':{
@@ -79,6 +81,11 @@ require(['jquery','service','promise'], function($,Service,promise){
 				after : function(){
 					wechatPayInitAfter(service,this.data);
 				},
+				methods : {
+					"pay":function(){
+						service.weixinPay();
+					},
+				}
 			}
 		}
 		return function(){

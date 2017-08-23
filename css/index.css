@@ -80,7 +80,7 @@ a{text-decoration:none;cursor:pointer;}
 .detail-spacies>p{font-size:1.4rem;border-bottom: 1px #E0E0E0 solid;}
 .detail-spacies>p.all-letters{line-height: 2.2rem;padding:.7rem .5rem;}
 .detail-spacies>p.form-like{padding:0 .5rem;height:5.4rem;line-height: 5.4rem;}
-.detail-spacies>p.form-like>span{height: 5.4rem;line-height: 5.4rem;text-align: left;width:11rem;display: inline-block;}
+.detail-spacies>p.form-like>span{height: 5.4rem;line-height: 5.4rem;text-align: left;display: inline-block;}
 .detail-spacies>p.form-like>span:first-child{width:11rem;}
 /*付款页面*/
 .order-detail-list.wechat-pay-detail{border:none;padding-bottom:0;margin:0 auto;}

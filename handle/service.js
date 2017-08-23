@@ -2,7 +2,7 @@
 	*@explain歸總此頁面方法
 */
 
-define(['jquery','staticPath','weixinShare','promise','artTemplate','config','watch','countDown'],function($,apis,wxShare,promise,Template,config,watch,CountDown){
+define(['jquery','staticPath','weixinShare','weixinPay','promise','artTemplate','config','watch','countDown','jquery.toJSON'],function($,apis,wxShare,weixinPay,promise,Template,config,watch,CountDown){
 	var H5Funcs=function(pagesSetting){
 		this.pagesData = pagesSetting(this)();
 		this.pageInit();
@@ -14,7 +14,8 @@ define(['jquery','staticPath','weixinShare','promise','artTemplate','config','wa
 		var self = this;
 		if(!self.enterPageFilter())//是否满足页面的过滤条件（微信浏览）
 		   return
-		self.wxShare("约吧","一场无压力的约会之旅","");//调用微信分享
+		self.wxShare("测试","测试分享使用的","");//调用微信分享
+		self.wxGetUserInfo();//获取微信人的信息
 		self.setUpPage();
 		self.pageChange();
 	}
@@ -26,7 +27,6 @@ define(['jquery','staticPath','weixinShare','promise','artTemplate','config','wa
 		var pageTitle = self.getPageName()||"home";
 		var pageObj = config.pageMap[pageTitle];
 		if(pageObj==undefined){
-			alert(config.pageMap["404"].templateId);
 			self.renderPage(config.pageMap["404"].contentId,config.pageMap["404"].templateId,{},{});
 			return
 		}
@@ -103,10 +103,10 @@ define(['jquery','staticPath','weixinShare','promise','artTemplate','config','wa
 			dataType: "json",
 		}).then(function(response){
 			wxShare({
-				jsapi_ticket:response.data.jsapi_ticket,
-				noncestr:response.data.noncestr,
-				timestamp:response.data.timestamp,
-				appid:response.data.appid,
+				jsapi_ticket:response.ticket,
+				noncestr:config.weChartConfig().noncestr,
+				timestamp:config.weChartConfig().timestamp,
+				appid:config.weChartConfig().appid,
 				href:location.href.split('#')[0],
 				title:title,
 				describe:describe,
@@ -116,10 +116,42 @@ define(['jquery','staticPath','weixinShare','promise','artTemplate','config','wa
 			alert("調用分享失敗");
 		})
 	}
+
+	/*
+		*@explain進行微信支付
+	*/
+	H5Funcs.prototype.weixinPay=function(){
+		weixinPay({
+				noncestr:config.weChartConfig().noncestr,
+				timestamp:config.weChartConfig().timestamp,
+				appid:config.weChartConfig().appid
+			}
+		);
+	}
+	/*
+		*@explain获取微信用户信息
+	*/
+	H5Funcs.prototype.wxGetUserInfo=function(title,describe,imgUrl){
+		alert(localStorage.getItem("code"));
+		var data = {"code": localStorage.getItem("code")};
+		$.ajax({
+			type: "get",
+			async: true,
+			url:apis.wxUserinfo,
+			dataType: "json",
+			data:data,
+		}).then(function(response){
+			alert("你是"+response.data.nickname);
+			alert("unionid"+response.data.unionid);
+		},function(response){
+			alert("获取用户信息失败");
+		})
+	}
+
 	/*
 		*@explain進行配置微信支付
 	*/
-	
+
 
 	/*
 	*保存評論内容
@@ -168,7 +200,14 @@ define(['jquery','staticPath','weixinShare','promise','artTemplate','config','wa
 	*/
 	H5Funcs.prototype.enterPageFilter = function(){
 		var self = this;
-		return self.filterWecart();
+		if(self.filterWecart()){
+			if(self.filterActivityPageCheck())
+				return true
+			else
+				return false
+		}else{
+			return  false
+		}
 	}
 	/*
 		*@explain 非微信浏览器过滤
@@ -177,18 +216,78 @@ define(['jquery','staticPath','weixinShare','promise','artTemplate','config','wa
 		var self = this;
 		var notWechatBowerHtml = "<p>抱歉：</p>\
 								  <p>此页面需在微信中打开</p>";
-		// if(!self.getAgentVersion().weixin){
-		// 	$("body").html(notWechatBowerHtml);
-		// 	return false
-		// }
+		if(!self.getAgentVersion().weixin){
+		   $("body").html(notWechatBowerHtml);
+			return false
+		}
 		return true
 	}
+
+	/*
+		*@explain 验证是否是验证跳转后的页面
+	*/
+	H5Funcs.prototype.filterWecartUserInfoCheck = function(){
+		var self = this;
+		if(self.getQueryString("code")){
+			if(!localStorage.getItem("raisePerson")){
+				return "pageerror"
+			}
+			return "authpage"
+		}
+		return "activitypage"
+	}
+
+	/*
+		*@explain 判断是否是活动进入的页面
+	*/
+	H5Funcs.prototype.filterActivityPageCheck = function(){
+		var self = this;
+
+		var authCheck = self.filterWecartUserInfoCheck();
+		var pageErrorHtml = "<p>抱歉：</p>\
+								  <p>此页面参数有误，请获取正确的活动链接</p>";
+		if(authCheck == "activitypage"){
+			if(localStorage.getItem("enterStatus")=="1"){
+				console.log("localStorage.getItem()",localStorage.getItem("code"));
+				localStorage.setItem("enterStatus","0")
+				return true
+			}else{	
+				if(!self.getQueryString("raisePerson")){
+					$("body").html(pageErrorHtml);
+					return false
+				}
+				localStorage.setItem("raisePerson",self.getQueryString("raisePerson"));
+				localStorage.setItem("originalpath",location.href);
+				location.href = config.weChartConfig().authPath;
+				return false
+			}
+		}
+		if(authCheck == "authpage"){
+			localStorage.setItem("code",self.getQueryString("code"));
+			localStorage.setItem("state",self.getQueryString("state"));
+			localStorage.setItem("enterStatus","1");
+			location.href = localStorage.getItem("originalpath");
+			return false
+		}
+		if(authCheck == "pageerror"){
+			$("body").html(pageErrorHtml);
+			return false
+		}
+
+	}
+
+	/*
+		*@explain 判断是否是活动进入的页面
+	*/
 
 	//获取页面传递的参数
 	H5Funcs.prototype.getQueryString=function(name){
 		location.href.replace(/%27/g,"'");
 		var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
 		var para = window.location.href.split("?")[1];
+		if(!para){
+			return null;
+		}
 		var r = para.match(reg);
 		if (r != null) {
 			return unescape(r[2]);

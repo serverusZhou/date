@@ -7,7 +7,8 @@ define(['config'],function(config){
 		var amazingurl=domain+"operation";
 		var subscribe=domain+"subscribe";
 		var getCommentList=domain+"comment/showCommentList";
-		var wxshare="https://test.juziwl.com/zsh/users/wxshare"
+		var wxshare="http://oauth.qa.services.fandanfanli.com/v1/weixin_jsapi_ticket";
+		var wxUserinfo="http://192.168.1.108:3000/getWeChatUserInfo";
 		return function(){
 			return {
 				filedomain:filedomain,
@@ -16,6 +17,7 @@ define(['config'],function(config){
 				subscribe:subscribe,
 				wxshare:wxshare,
 				getCommentList:getCommentList,
+				wxUserinfo:wxUserinfo
 			}
 		}
 	}

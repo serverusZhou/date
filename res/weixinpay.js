@@ -1,11 +1,6 @@
 /**
  * White By Arvin
  */
-require.config({
-	paths:{
-			 "weixin": "../plugins/jweixin-1.0.0",
-		  },
-});
 define(['weixin','config','sha1'], function(weixin,config,sha1){
 	/*
 	 **分享微信調用
@@ -19,10 +14,10 @@ define(['weixin','config','sha1'], function(weixin,config,sha1){
 		WeixinJSBridge.invoke(
         'getBrandWCPayRequest', 
         {
-        "appId":configs.weChartConfig.appId,     //公众号名称，由商户传入     
-        "timeStamp":"1395712654",         //时间戳，自1970年以来的秒数     
-        "nonceStr":"e61463f8efa94090b1f366cccfbbb444", //随机串     
-        "package":"prepay_id=u802345jgfjsdfgsdg888",     
+        "appId":configs.appid,     //公众号名称，由商户传入     
+        "timeStamp":parseInt(configs.timestamp),//时间戳，自1970年以来的秒数     
+        "nonceStr":configs.noncestr, //随机串     
+        "package":"prepay_id=u802345jgfjsdfgsdg888",
         "signType":"MD5",         //微信签名方式：     
         "paySign":"70EA570631E4BB79628FBCA90534C63FF7FADD89" //微信签名 
        },

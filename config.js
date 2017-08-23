@@ -21,11 +21,28 @@ define(function(){
 			}
 		}
 
-		var weChartConfig = {
-			appId : "wx72e523b991255618",
-			secret : "103329cf0f68ece7f8717afc969eb7d3",
-			accessToken : "zRmz6aaPgQG2eJbb4iL_AcgbC85-Axx1934udg6fxjdbq1brEUQRKjQfx7D8du41g70yUGp3bKFvCcfbRacD-MWNGHVGLcacTvtwrcyPeYJqWnxmySrXxRMXsQGu1rmOHHEbAGAPPM",
-			path : "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx72e523b991255618&redirect_uri=http%3a%2f%2fbgtest.natapp1.cc%2f&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect"
+		// var weChartConfig = {
+		// 	appid : "wx72e523b991255618",
+		// 	secret : "103329cf0f68ece7f8717afc969eb7d3",
+		// 	noncestr : "Wm3WZYTPz0wzccnW",
+		// 	timestamp : "1414587457",
+		// 	authPath : "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx72e523b991255618&redirect_uri=http%3a%2f%2fbgtest.natapp1.cc%2f&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect"
+		// }
+
+		var weChartConfig = function(){
+			var appid = "wx72e523b991255618";
+			var secret = "103329cf0f68ece7f8717afc969eb7d3";
+			var noncestr = "Wm3WZYTPz0wzccnW";
+			var timestamp = "1414587457";
+			var redirect_uri ="http%3a%2f%2fbgtest.natapp1.cc%2f";
+			var authPath = "https://open.weixin.qq.com/connect/oauth2/authorize?appid="+appid+"&redirect_uri="+redirect_uri+"&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect";
+			return {
+				appid : appid,
+				secret : secret,
+				noncestr : noncestr,
+				timestamp : timestamp,
+				authPath : authPath,
+			}
 		}
 		
 		/*
@@ -36,6 +53,11 @@ define(function(){
 		*項目域名地址
 		*/
 		var domain="http://192.168.0.199:8080";
+
+		/*
+		*項目域名地址
+		*/
+		var apiDomain="http://192.168.0.199:8080";
 
 		/*
 		*判断是否只可以在微信登录
