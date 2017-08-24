@@ -11,12 +11,10 @@ define(['weixin','config','sha1'], function(weixin,config,sha1){
 		if(!weixin){
 			weixin=wx;
 		}
-		console.log(configs.href);
 		//拼接簽名字符串
 		var jsapi_ticket="jsapi_ticket="+configs.jsapi_ticket+"&noncestr="+configs.noncestr+"&timestamp="+configs.timestamp+"&url="+configs.href;
 		//生成sha1簽名
 		var signature=hex_sha1(jsapi_ticket);
-		console.log("signature",signature);
 		weixin.config({
 			debug: config.wxDebug,
 			appId: configs.appid, // 必填，公众号的唯一标识

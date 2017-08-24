@@ -4,8 +4,10 @@
 
 define(['jquery','staticPath','weixinShare','weixinPay','promise','artTemplate','config','watch','countDown','jquery.toJSON'],function($,apis,wxShare,weixinPay,promise,Template,config,watch,CountDown){
 	var H5Funcs=function(pagesSetting){
-		this.pagesData = pagesSetting(this)();
-		this.pageInit();
+		if(pagesSetting){
+			this.pagesData = pagesSetting(this)();
+			this.pageInit();
+		}
 	}
 	/*
 		*@explain初始化页面
@@ -14,7 +16,7 @@ define(['jquery','staticPath','weixinShare','weixinPay','promise','artTemplate',
 		var self = this;
 		if(!self.enterPageFilter())//是否满足页面的过滤条件（微信浏览）
 		   return
-		self.wxShare("测试","测试分享使用的","");//调用微信分享
+		self.wxShare("就差个标题","活动很好，就差一个标题","");//调用微信分享
 		self.wxGetUserInfo();//获取微信人的信息
 		self.setUpPage();
 		self.pageChange();
@@ -31,11 +33,14 @@ define(['jquery','staticPath','weixinShare','weixinPay','promise','artTemplate',
 			return
 		}
 		self.pagesData[pageTitle].init().then(function(){
-			self.renderPage(pageObj.contentId,pageObj.templateId,self.pagesData[pageTitle].data,self.pagesData[pageTitle].methods);
-			self.watchAllData(self.pagesData[pageTitle].data,function(){
+			$("#main-body").animate({opacity:0},100,function(){
 				self.renderPage(pageObj.contentId,pageObj.templateId,self.pagesData[pageTitle].data,self.pagesData[pageTitle].methods);
+				self.watchAllData(self.pagesData[pageTitle].data,function(){
+					self.renderPage(pageObj.contentId,pageObj.templateId,self.pagesData[pageTitle].data,self.pagesData[pageTitle].methods);
+				})
+				self.pagesData[pageTitle].after();
+				$("#main-body").animate({opacity:1});
 			})
-			self.pagesData[pageTitle].after();
 		},function(){
 
 		})
@@ -132,46 +137,41 @@ define(['jquery','staticPath','weixinShare','weixinPay','promise','artTemplate',
 		*@explain获取微信用户信息
 	*/
 	H5Funcs.prototype.wxGetUserInfo=function(title,describe,imgUrl){
-		alert(localStorage.getItem("code"));
-		var data = {"code": localStorage.getItem("code")};
+		var data = {"password": localStorage.getItem("code"),"username" : "WEIXIN_H5","grant_type" : "password"};
 		$.ajax({
-			type: "get",
+			type: "post",
 			async: true,
-			url:apis.wxUserinfo,
-			dataType: "json",
+			url:apis.wxUserinfoToken,
 			data:data,
+			dataType: "json",
+			contentType:"application/x-www-form-urlencoded",
+			headers :{
+				Authorization : "Basic dGVzdGNsaWVudDp0ZXN0dGVzdA=="
+			}
 		}).then(function(response){
-			alert("你是"+response.data.nickname);
-			alert("unionid"+response.data.unionid);
+			$.ajax({
+				type: "get",
+				async: true,
+				url:apis.wxUserInfo,
+				data:data,
+				dataType: "json",
+				contentType:"application/x-www-form-urlencoded",
+				headers :{
+					Authorization : "Bearer "+response.access_token
+				}
+			}).then(function(){
+				alert("获取用户信息失败");
+			},function(){
+				alert("获取用户信息失败");
+			})
 		},function(response){
-			alert("获取用户信息失败");
+			alert("获取用户Token失败");
 		})
 	}
 
 	/*
 		*@explain進行配置微信支付
 	*/
-
-
-	/*
-	*保存評論内容
-	*/
-	H5Funcs.prototype.saveCommentInfo=function(articleId,content,creator,Uid,AccessToken){
-		var data = {"articleId":articleId,"content":content,"creator":creator};
-		$.ajax({
-			type: "post",
-			async: false,
-			url:domainApi+"comment/saveCommentInfo",
-			data:$.toJSON(data),
-			dataType: "json",
-			contentType:"application/json;charset=utf-8",
-			headers:{'Uid':Uid,'AccessToken':AccessToken},
-		}).then(function(response){
-
-		},function(){
-			alert("評論失敗");
-		})
-	}
 
 	 /*
 		*@explain 获取浏览器类型
@@ -245,10 +245,9 @@ define(['jquery','staticPath','weixinShare','weixinPay','promise','artTemplate',
 
 		var authCheck = self.filterWecartUserInfoCheck();
 		var pageErrorHtml = "<p>抱歉：</p>\
-								  <p>此页面参数有误，请获取正确的活动链接</p>";
+							 <p>此页面参数有误，请获取正确的活动链接</p>";
 		if(authCheck == "activitypage"){
 			if(localStorage.getItem("enterStatus")=="1"){
-				console.log("localStorage.getItem()",localStorage.getItem("code"));
 				localStorage.setItem("enterStatus","0")
 				return true
 			}else{	
@@ -257,7 +256,7 @@ define(['jquery','staticPath','weixinShare','weixinPay','promise','artTemplate',
 					return false
 				}
 				localStorage.setItem("raisePerson",self.getQueryString("raisePerson"));
-				localStorage.setItem("originalpath",location.href);
+				localStorage.setItem("originalpath",location.href.split("#")[0]);
 				location.href = config.weChartConfig().authPath;
 				return false
 			}
@@ -304,13 +303,32 @@ define(['jquery','staticPath','weixinShare','weixinPay','promise','artTemplate',
 		});
 	}
 
+	//页面加载
+	H5Funcs.prototype.pageLoading=function(){
+		var loadHtml = '<div class="page_mask" id="page-loading">\
+							<div style="text-align:center;">\
+								<div class="spinner">\
+									<div class="rect1"></div>\
+									<div class="rect2"></div>\
+									<div class="rect3"></div>\
+									<div class="rect4"></div>\
+									<div class="rect5"></div>\
+								</div>\
+							</div>\
+						</div>'
+		$("body").append(loadHtml);
+	}
+	//页面加载完成
+	H5Funcs.prototype.pageLoadingEnd=function(){
+		$("#page-loading").remove();
+	}
+
 	//倒计时（秒）
 	H5Funcs.prototype.getMinusOneSeconeTime=function(time){
 		var timeStr =  (new Date(time)).getTime();
 		var returnTime = new Date(timeStr-1000);
 		return returnTime
 	}
-
 
 	return H5Funcs
 })

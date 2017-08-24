@@ -55,9 +55,9 @@ define(function(){
 		var domain="http://192.168.0.199:8080";
 
 		/*
-		*項目域名地址
+		*接口域名
 		*/
-		var apiDomain="http://192.168.0.199:8080";
+		var authApiDomain="http://oauth.qa.services.fandanfanli.com";
 
 		/*
 		*判断是否只可以在微信登录
@@ -70,7 +70,8 @@ define(function(){
 				domain : domain,
 				pageMap : pageMap,
 				onlyWeChat : onlyWeChat,
-				weChartConfig : weChartConfig
+				weChartConfig : weChartConfig,
+				authApiDomain : authApiDomain,
 			}
 		}
 	}

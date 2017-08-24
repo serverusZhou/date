@@ -4,19 +4,29 @@
 define(['jquery'],function($){
 	var CountDown=function(settings){
 		this.setting = settings;
-		var countDownHtml='<div class="num" id="day">0</div>\
-							<span>天</span>\
-							<div class="num" id="hour2">0</div>\
-							<div class="num" id="hour1">0</div>\
-							<span>时</span>\
-							<div class="num" id="minute2">0</div>\
-							<div class="num" id="minute1">0</div>\
-							<span>分</span>\
-							<div class="num" id="second2">0</div>\
-							<div class="num" id="second1">0</div>\
-							<span>秒</span>';
+		var countDownColorFulHtml='<div class="num" id="day">0</div>\
+									<span>天</span>\
+									<div class="num" id="hour2">0</div>\
+									<div class="num" id="hour1">0</div>\
+									<span>时</span>\
+									<div class="num" id="minute2">0</div>\
+									<div class="num" id="minute1">0</div>\
+									<span>分</span>\
+									<div class="num" id="second2">0</div>\
+									<div class="num" id="second1">0</div>\
+									<span>秒</span>';
 
-		return new CountDown.prototype.init(settings,countDownHtml);
+
+		var countDownCommonHtml='<div class="num" id="hour2">0</div>\
+								<div class="num" id="hour1">0</div>\
+								<span>:</span>\
+								<div class="num" id="minute2">0</div>\
+								<div class="num" id="minute1">0</div>\
+								<span>:</span>\
+								<div class="num" id="second2">0</div>\
+								<div class="num" id="second1">0</div>';
+		var returnHtml = (settings.type == "colorful") ? countDownColorFulHtml : countDownCommonHtml;
+		return new CountDown.prototype.init(settings,returnHtml);
 	}
 	CountDown.prototype={
 		init:function(settings,countDownHtml){

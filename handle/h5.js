@@ -64,9 +64,13 @@ require(['jquery','service','promise'], function($,Service,promise){
 							$("#is-show-details-btn").html("展开详情");
 							$("#order-details").fadeOut(300);
 						}else{
+
+							var timeAchole = $("#time-achole").offset().top-screen.width/375*10*4;
 							$("#is-show-details-btn").attr("class","opened");
 							$("#is-show-details-btn").html("收起详情");
-							$("#order-details").fadeIn(300);
+							$("#order-details").fadeIn(100,function(){
+								$("html,body").animate({scrollTop:timeAchole},400);
+							});
 						}
 					}
 				}
@@ -94,8 +98,12 @@ require(['jquery','service','promise'], function($,Service,promise){
 	}
 	//home页面启动函数
 	var homePageInit = function(service,data){
+		if(!$("#main-body").hasClass("has-download-app"))
+			$("#main-body").addClass("has-download-app")
 		var p=new promise.Promise();
+		service.pageLoading();
 		p.done(data,"success");
+		service.pageLoadingEnd();
 		return p
 	}
 	var homeInitAfter =  function(service,data){
@@ -103,6 +111,8 @@ require(['jquery','service','promise'], function($,Service,promise){
 	}
 
 	var wechatPayPageInit = function (service,data){
+		if($("#main-body").hasClass("has-download-app"))
+			$("#main-body").removeClass("has-download-app");
 		var p=new promise.Promise();
 		p.done(data,"success");
 		return p
