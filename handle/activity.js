@@ -25,10 +25,13 @@
 	    },
 	}
 });
-require(['jquery','service','promise'], function($,Service,promise){
+require(['jquery','service','promise','config'], function($,Service,promise,config){
 	/*
 		*@explain页面启动
 	*/
-	new Service().wxShare("就差个标题xxxx","活动很好，就差一个标题xxx","");
+	var service = new Service();
+	service.wxShare(config.weChartConfig().advShare.title,config.weChartConfig().advShare.noncestr,config.weChartConfig().advShare.img);
+	service.stopBrowerdefaultEvent();
+	//topBowerDefault();
 })
 

@@ -16,7 +16,7 @@ define(['jquery','staticPath','weixinShare','weixinPay','promise','artTemplate',
 		var self = this;
 		if(!self.enterPageFilter())//是否满足页面的过滤条件（微信浏览）
 		   return
-		self.wxShare("就差个标题","活动很好，就差一个标题","");//调用微信分享
+		self.wxShare(config.weChartConfig().activityShare.title,config.weChartConfig().activityShare.noncestr,config.weChartConfig().activityShare.img);//调用微信分享
 		self.wxGetUserInfo();//获取微信人的信息
 		self.setUpPage();
 		self.pageChange();
@@ -328,6 +328,28 @@ define(['jquery','staticPath','weixinShare','weixinPay','promise','artTemplate',
 		var timeStr =  (new Date(time)).getTime();
 		var returnTime = new Date(timeStr-1000);
 		return returnTime
+	}
+	//阻止浏览器默认拖动事件
+	H5Funcs.prototype.stopBrowerdefaultEvent=function(time){
+		//document.body.addEventListener('touchmove', function(e) {
+			//e.stopPropagation();
+			//e.preventDefault();
+		//});
+		var lastY;//最后一次y坐标点
+		$(document.body).on('touchstart', function(event) {
+			lastY = event.originalEvent.changedTouches[0].clientY;//点击屏幕时记录最后一次Y度坐标。
+		});
+		$(document.body).on('touchmove', function(event) {
+			var y = event.originalEvent.changedTouches[0].clientY;
+			var st = $(this).scrollTop(); //滚动条高度 
+			console.log(st);
+			if (y >= lastY && st <= 10) {//如果滚动条高度小于0，可以理解为到顶了，且是下拉情况下，阻止touchmove事件。
+				alert("aaaaaaaa");
+				lastY = y;
+				event.preventDefault();
+			}
+			lastY = y; 
+		});
 	}
 
 	return H5Funcs

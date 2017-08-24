@@ -36,12 +36,24 @@ define(function(){
 			var timestamp = "1414587457";
 			var redirect_uri ="http%3a%2f%2fbgtest.natapp1.cc%2f";
 			var authPath = "https://open.weixin.qq.com/connect/oauth2/authorize?appid="+appid+"&redirect_uri="+redirect_uri+"&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect";
+			var advShare = {
+				title : "就差个标题xxx",
+				noncestr : "活动很好，就差一个标题xxx",
+				img : ""
+			}
+			var activityShare = {
+				title : "就差个标题",
+				noncestr : "活动很好，就差一个标题",
+				img : ""
+			}
 			return {
 				appid : appid,
 				secret : secret,
 				noncestr : noncestr,
 				timestamp : timestamp,
 				authPath : authPath,
+				advShare : advShare,
+				activityShare : activityShare
 			}
 		}
 		
