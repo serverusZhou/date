@@ -17,9 +17,13 @@ define(['jquery','staticPath','weixinShare','weixinPay','promise','artTemplate',
 		if(!self.enterPageFilter())//是否满足页面的过滤条件（微信浏览）
 		   return
 		self.wxShare(config.weChartConfig().activityShare.title,config.weChartConfig().activityShare.noncestr,config.weChartConfig().activityShare.img);//调用微信分享
-		self.wxGetUserInfo();//获取微信人的信息
-		self.setUpPage();
-		self.pageChange();
+		self.wxGetUserInfo().then(function(data,msg){
+			if(msg == "success"){
+				localStorage.setItem("fd_id",data.id);
+				self.setUpPage();
+				self.pageChange();
+			}
+		})
 	}
 	/*
 		*@explain页面启动
@@ -125,7 +129,30 @@ define(['jquery','staticPath','weixinShare','weixinPay','promise','artTemplate',
 	/*
 		*@explain進行微信支付
 	*/
-	H5Funcs.prototype.weixinPay=function(){
+	H5Funcs.prototype.weixinPay=function(userid,mobile,Authorization){
+		var self = this;
+		var p=new promise.Promise();
+		if(!mobile){
+			alert("您需要输入手机号！");
+			return
+		}
+		var requestData='{"user_id":"'+userid+'","mobile":"'+mobile+'"}';
+		$.ajax({
+			type: "put",
+			async: true,
+			url: self.formatUrl(apis.setMobile,{'order_id' : localStorage.getItem("orderId")}),
+			data : requestData,
+			dataType: "json",
+			contentType: 'application/json',
+			headers :{
+				'Authorization' : Authorization
+			}
+		}).then(function(response){
+			p.done(response,"success");
+		},function(response){
+			p.done("手机号设置失败","failed");
+			alert("手机号设置失败");
+		})
 		weixinPay({
 				noncestr:config.weChartConfig().noncestr,
 				timestamp:config.weChartConfig().timestamp,
@@ -137,6 +164,7 @@ define(['jquery','staticPath','weixinShare','weixinPay','promise','artTemplate',
 		*@explain获取微信用户信息
 	*/
 	H5Funcs.prototype.wxGetUserInfo=function(title,describe,imgUrl){
+		var p = new promise.Promise();
 		var data = {"password": localStorage.getItem("code"),"username" : "WEIXIN_H5","grant_type" : "password"};
 		$.ajax({
 			type: "post",
@@ -149,6 +177,7 @@ define(['jquery','staticPath','weixinShare','weixinPay','promise','artTemplate',
 				Authorization : "Basic dGVzdGNsaWVudDp0ZXN0dGVzdA=="
 			}
 		}).then(function(response){
+			localStorage.setItem("Authorization",response.access_token);
 			$.ajax({
 				type: "get",
 				async: true,
@@ -159,14 +188,15 @@ define(['jquery','staticPath','weixinShare','weixinPay','promise','artTemplate',
 				headers :{
 					Authorization : "Bearer "+response.access_token
 				}
-			}).then(function(){
-				alert("获取用户信息失败");
+			}).then(function(res){
+				p.done(res,"success");
 			},function(){
-				alert("获取用户信息失败");
+				p.done("can not get user info","fail");
 			})
 		},function(response){
-			alert("获取用户Token失败");
+			p.done("can not get token","fail");
 		})
+		return p
 	}
 
 	/*
@@ -229,7 +259,7 @@ define(['jquery','staticPath','weixinShare','weixinPay','promise','artTemplate',
 	H5Funcs.prototype.filterWecartUserInfoCheck = function(){
 		var self = this;
 		if(self.getQueryString("code")){
-			if(!localStorage.getItem("raisePerson")){
+			if(!localStorage.getItem("orderId")){
 				return "pageerror"
 			}
 			return "authpage"
@@ -251,11 +281,11 @@ define(['jquery','staticPath','weixinShare','weixinPay','promise','artTemplate',
 				localStorage.setItem("enterStatus","0")
 				return true
 			}else{	
-				if(!self.getQueryString("raisePerson")){
+				if(!self.getQueryString("orderId")){
 					$("body").html(pageErrorHtml);
 					return false
 				}
-				localStorage.setItem("raisePerson",self.getQueryString("raisePerson"));
+				localStorage.setItem("orderId",self.getQueryString("orderId"));
 				localStorage.setItem("originalpath",location.href.split("#")[0]);
 				location.href = config.weChartConfig().authPath;
 				return false
@@ -316,11 +346,30 @@ define(['jquery','staticPath','weixinShare','weixinPay','promise','artTemplate',
 								</div>\
 							</div>\
 						</div>'
-		$("body").append(loadHtml);
+		if(!($("#page-loading").length && $("#page-loading").length > 0))
+			$("body").append(loadHtml);
 	}
 	//页面加载完成
 	H5Funcs.prototype.pageLoadingEnd=function(){
 		$("#page-loading").remove();
+	}
+
+	//页面加载完成
+	H5Funcs.prototype.formatUrl=function(url,params){
+		var jsonArray = url.split("$");
+		var finalUrl = "";
+		$.each(jsonArray,function(i,urlvalue){
+			$.each(params,function(key,value){
+				if(urlvalue == key){
+					jsonArray[i]= value;
+				}
+			})
+		})
+		$.each(jsonArray,function(i,urlvalue){
+			console.log(urlvalue);
+			finalUrl+=urlvalue;
+		})
+		return finalUrl
 	}
 
 	//倒计时（秒）
@@ -329,28 +378,84 @@ define(['jquery','staticPath','weixinShare','weixinPay','promise','artTemplate',
 		var returnTime = new Date(timeStr-1000);
 		return returnTime
 	}
-	//阻止浏览器默认拖动事件
-	H5Funcs.prototype.stopBrowerdefaultEvent=function(time){
+
+	//浏览器下拉刷新事件
+	H5Funcs.prototype.stopBrowerdefaultEvent=function(func){
+		var self = this;
 		//document.body.addEventListener('touchmove', function(e) {
 			//e.stopPropagation();
 			//e.preventDefault();
 		//});
+		var isInProgress = true;
 		var lastY;//最后一次y坐标点
+		$(document.body).off('touchstart');
+		$(document.body).off('touchmove');
 		$(document.body).on('touchstart', function(event) {
 			lastY = event.originalEvent.changedTouches[0].clientY;//点击屏幕时记录最后一次Y度坐标。
 		});
 		$(document.body).on('touchmove', function(event) {
 			var y = event.originalEvent.changedTouches[0].clientY;
 			var st = $(this).scrollTop(); //滚动条高度 
-			console.log(st);
 			if (y >= lastY && st <= 10) {//如果滚动条高度小于0，可以理解为到顶了，且是下拉情况下，阻止touchmove事件。
-				alert("aaaaaaaa");
 				lastY = y;
+				if(typeof func == "function"){
+					if(isInProgress){
+						isInProgress = false;
+						self.pageLoading();
+						setTimeout(function(){
+							isInProgress = true;
+						},1000)
+						func();
+					}
+				}
 				event.preventDefault();
 			}
 			lastY = y; 
 		});
 	}
+	//时间格式化
+	H5Funcs.prototype.timeStamp2String = function(time){
+		var datetime = new Date();
+		datetime.setTime(time);
+		console.log("datetime",datetime);
+		var year = datetime.getFullYear();
+		var month = datetime.getMonth() + 1 < 10 ? "0" + (datetime.getMonth() + 1) : datetime.getMonth() + 1;
+		var date = datetime.getDate() < 10 ? "0" + datetime.getDate() : datetime.getDate();
+		var hour = datetime.getHours()< 10 ? "0" + datetime.getHours() : datetime.getHours();
+		var minute = datetime.getMinutes()< 10 ? "0" + datetime.getMinutes() : datetime.getMinutes();
+		var second = datetime.getSeconds()< 10 ? "0" + datetime.getSeconds() : datetime.getSeconds();
+		return year + "-" + month + "-" + date+" "+hour+":"+minute+":"+second;
+	}
+
+	//弹框alert
+	H5Funcs.prototype.alert=function(time){
+		var alerts={
+				confirmHtml:function(){
+					html='<div class="page_mask"> id="exalert"';
+					html+='<div class="exalert">';
+					html+='<div class="exalertmsg">'+msg;
+					html+='</div>';
+					html+='</div>';
+					html+='</div>';
+					return html
+				},
+				init:function(){
+					alerts.destory();
+					$("body").before(alerts.confirmHtml());
+					setTimeout(function(){
+						alerts.destory();
+						if(linkurl){
+							location.href=linkurl;
+						}
+					},1500);
+				},
+				destory:function(){
+						$(".exalert").remove();
+				}
+		}
+		alerts.init();
+	}
+
 
 	return H5Funcs
 })

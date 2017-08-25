@@ -56,15 +56,23 @@ define(['jquery'],function($){
 				return returnTime
 		},
 		getTimeMap:function(time){
-			var formatedTime = new Date(time);
+			var remaintime = time;
+			var days = Math.floor(time/(1000*60*60*24));
+			remaintime -= days*(1000*60*60*24);
+			var hours = Math.floor(remaintime/(1000*60*60));
+			remaintime -= hours*(1000*60*60);
+			var minutes = Math.floor(remaintime/(1000*60));
+			remaintime -= minutes*(1000*60);
+			var seconds = Math.floor(remaintime/(1000));
+
 			return {
-				"day":formatedTime.getDay(),
-				"hour2":Math.floor(formatedTime.getHours()/10),
-				"hour1":formatedTime.getHours()%10,
-				"minute2":Math.floor(formatedTime.getMinutes()/10),
-				"minute1":formatedTime.getMinutes()%10,
-				"second2":Math.floor(formatedTime.getSeconds()/10),
-				"second1":formatedTime.getSeconds()%10,
+				"day":days,
+				"hour2":Math.floor(hours/10),
+				"hour1":hours%10,
+				"minute2":Math.floor(minutes/10),
+				"minute1":minutes%10,
+				"second2":Math.floor(seconds/10),
+				"second1":seconds%10,
 			}
 		},
 		setHtml:function(oldTimeMap,rightTimeMap,returnTime){

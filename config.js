@@ -70,6 +70,7 @@ define(function(){
 		*接口域名
 		*/
 		var authApiDomain="http://oauth.qa.services.fandanfanli.com";
+		var orderApiDomain="http://order.qa.services.fandanfanli.com";
 
 		/*
 		*判断是否只可以在微信登录
@@ -84,6 +85,7 @@ define(function(){
 				onlyWeChat : onlyWeChat,
 				weChartConfig : weChartConfig,
 				authApiDomain : authApiDomain,
+				orderApiDomain : orderApiDomain
 			}
 		}
 	}

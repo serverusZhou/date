@@ -31,7 +31,10 @@ a{text-decoration:none;cursor:pointer;}
 
 .max-content{max-width:640px;margin:0 auto;overflow-x:hidden;}
 /*页面加载的样式*/
-.page_mask{position: fixed;z-index: 11111;top:0;left:0;width:100%;height:100%;}
+.page_mask{position: fixed;z-index: 11111;top:0;left:0;width:100%;height:100%;background-color: rgba(0,0,0,.2);-webkit-animation: fadein 0.3s 1 ease-in-out;animation: fadein 0.3s 1 ease-in-out;}
+@-webkit-keyframes fadein {from {background-color: rgba(0,0,0,0)} to {background-color: rgba(0,0,0,.2)}}
+@keyframes fadein { from {background-color: rgba(0,0,0,0)} to {background-color: rgba(0,0,0,.2)}}
+
 .spinner{height:50px;padding-top:200px;}
 .spinner>div {background-color: #db3644;height: 100%;width: 6px;display: inline-block;-webkit-animation: stretchdelay 1.2s infinite ease-in-out;animation: stretchdelay 1.2s infinite ease-in-out;}
 .spinner .rect2 {-webkit-animation-delay: -1.1s;animation-delay: -1.1s;}
@@ -40,6 +43,10 @@ a{text-decoration:none;cursor:pointer;}
 .spinner .rect5 {-webkit-animation-delay: -0.8s;animation-delay: -0.8s;}
 @-webkit-keyframes stretchdelay {0%, 40%, 100% { -webkit-transform: scaleY(0.4) } 20% { -webkit-transform: scaleY(1.0) }}
 @keyframes stretchdelay { 0%, 40%, 100% {transform: scaleY(0.4);-webkit-transform: scaleY(0.4);}  20% {transform: scaleY(1.0);-webkit-transform: scaleY(1.0);}}
+
+/* 弹出框的样式 */
+.alert-wrap{width:30rem;position: fixed;top:50%;z-index:11111;border-radius:3px;overflow:hidden;}
+
 
 /* 有下载app的样式，没有时直接remove掉has-download-app */
 .max-content.has-download-app{padding-top:4rem;}

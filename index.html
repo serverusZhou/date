@@ -38,16 +38,16 @@
         <div class="share-people-pic ib_dis_content">
           <!-- 循环头像 -->
           {{each headCuts}}
-            <div class="pic-wap {{$index==0?'initiator':''}}">
+            <div class="pic-wap {{$value.role=='INITIATOR'?'initiator':''}}">
               <div class="head-short-cut">
-                <img src="{{$value.imgUrl}}" />
+                <img src="{{$value.avatar_path}}" />
               </div>
             </div>
           {{/each}}
         </div>
         <div class="share-detail">
-          <p><span class="per-money">￥{{perMoney}}/人</span>{{totalPerson}}人拼单·已拼{{alreadyPaid}}人</p>
-          <p>拼单成功后您将得到奖励金<span class="reward-money">¥{{rewardMoney}}</span>。</p>
+          <p><span class="per-money">￥{{orderInfo.payment_aa_invitee_amount}}/人</span>{{orderInfo.payment_aa_invitee_amount}}人拼单·已拼{{orderInfo.alreadyPaidCustomerNumber}}人</p>
+          <p>拼单成功后您将得到奖励金<span class="reward-money">¥{{orderInfo.rewardMoney}}</span>。</p>
         </div>
         <div class="order-detail">
           <div class="order-detail-title ib_dis_content">
@@ -57,29 +57,65 @@
             <div class="detail-part">
                 <p class="detail-part-title">商家信息</p>
                 <div class="detail-spacies">
-                    <p class="has-icon icon-home">绿茶餐厅</p>
-                    <p class="has-icon icon-position"><span>工业园区金鸡湖大道1355号国际科技园四期A010</span></p>
+                    <p class="has-icon icon-home">{{restaurantInfo.restaurant_name}}</p>
+                    <p class="has-icon icon-position"><span>{{restaurantInfo.address1}}</span></p>
                 </div>
             </div>
             <div class="detail-part">
                 <p class="detail-part-title">赏味菜品</p>
                 <div class="detail-spacies">
-                    <p class="all-letters">美罗宋汤x1, 玉米浓汤x1, 蔬菜沙拉x1, 水果沙拉x2, 奥尔良烤鸡翅x1,胡萝卜三明治x2</p>
+                    <p class="all-letters">{{orderInfo.catalogueAll}}</p>
                 </div>
             </div>
             <div class="detail-part">
                 <p class="detail-part-title">订单信息</p>
                 <div class="detail-spacies">
-                    <p class="form-like"><span>用餐时间</span><span>2017-09-01 11:00</span></p>
-                    <p class="form-like"><span>邀请人手机号</span><span>13923456781</span></p>
+                    <p class="form-like"><span>用餐时间</span><span>{{orderInfo.effective_date}}</span></p>
+                    <p class="form-like"><span>邀请人手机号</span><span>{{orderInfo.inititorMobile}}</span></p>
                 </div>
             </div>
           </div>
         </div>
       </div>
-      <footer class="accep-invitation" fd-click="goWeChatPayPage()">
-        接受邀请
-      </footer>
+      <!-- 订单没有关闭 -->
+      {{if !isOrderClosed}}
+          <!-- 是邀请人 -->
+          {{if isInititor}}
+
+          {{/if}}
+          <!-- 不是邀请人 -->
+         {{if !isInititor}}
+          <!-- 已经接受邀请 -->
+          {{if orderInfo.isTakeInviter}}
+            <!-- 是否已经支付 -->
+            {{if isAlreadyPaid}}
+              <footer class="accep-invitation" fd-click="goWeChatPayPage()">
+                  您已接受邀请(白底红字 支付了)
+              </footer>
+            {{/if}}
+            <!-- 没有支付 -->
+            {{if !isAlreadyPaid}}
+              <footer class="accep-invitation" fd-click="goWeChatPayPage()">
+                  您已接受邀请，立即支付
+              </footer>
+            {{/if}}
+          {{/if}}
+           <!-- 不是邀请人 -->
+          {{if !orderInfo.isTakeInviter}}
+              {{if !orderInfo.isAllTakeinviters}}
+                <footer class="accep-invitation" fd-click="goWeChatPayPage()">
+                    接受邀请
+                </footer>
+              {{/if}}
+              {{if orderInfo.isAllTakeinviters}}
+                <footer class="accep-invitation">
+                    被预定完了，但是还有机会哦
+                </footer>
+              {{/if}}
+          {{/if}}
+        {{/if}}
+      {{/if}}
+
   </script>
   <!-- 跳转微信支付详情页面 -->
   <script id="wechatpay" type="text/html">
@@ -91,33 +127,33 @@
         </div>
         <div class="detail-part stick-border">
             <div class="detail-spacies">
-                <p class="form-like no-border"><input type="text" class="single" placeholder="输入手机号" /></p>
+                <p class="form-like no-border"><input type="text" class="single" placeholder="输入手机号" id="mobile-num" /></p>
             </div>
         </div>
         <div class="detail-part">
             <p class="detail-part-title">商家信息</p>
             <div class="detail-spacies">
-                <p class="has-icon icon-home">绿茶餐厅</p>
-                <p class="has-icon icon-position"><span>工业园区金鸡湖大道1355号国际科技园四期A010</span></p>
+                <p class="has-icon icon-home">{{restaurantInfo.restaurant_name}}</p>
+                <p class="has-icon icon-position"><span>{{restaurantInfo.address1}}</span></p>
             </div>
         </div>
         <div class="detail-part">
             <p class="detail-part-title">赏味菜品</p>
             <div class="detail-spacies">
-                <p class="all-letters">美罗宋汤x1, 玉米浓汤x1, 蔬菜沙拉x1, 水果沙拉x2, 奥尔良烤鸡翅x1,胡萝卜三明治x2</p>
+                <p class="all-letters">{{orderInfo.catalogueAll}}</p>
             </div>
         </div>
         <div class="detail-part stick-border">
             <p class="detail-part-title">订单信息</p>
             <div class="detail-spacies">
-                <p class="form-like"><span>用餐时间</span><span class="detail-value">2017-09-01 11:00</span></p>
-                <p class="form-like no-border"><span>邀请人手机号</span><span class="detail-value">13923456781</span></p>
+                <p class="form-like"><span>用餐时间</span><span class="detail-value">{{orderInfo.effective_date}}</span></p>
+                <p class="form-like no-border"><span>邀请人手机号</span><span class="detail-value">{{orderInfo.inititorMobile}}</span></p>
             </div>
         </div>
       </div>
     </div>
     <footer class="go-wecart-pay" fd-click="pay()">
-        <div class="count-total">总计：¥50.00</div>
+        <div class="count-total">总计：¥{{orderInfo.payment_aa_invitee_amount}}</div>
         <div class="chat-pay-btn" >微信支付</div>
     </footer>
   </script>

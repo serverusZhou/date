@@ -32,6 +32,9 @@ require(['jquery','service','promise','config'], function($,Service,promise,conf
 	var service = new Service();
 	service.wxShare(config.weChartConfig().advShare.title,config.weChartConfig().advShare.noncestr,config.weChartConfig().advShare.img);
 	service.stopBrowerdefaultEvent();
+	service.stopBrowerdefaultEvent(function(){
+		console.log("下拉刷新");
+	});
 	//topBowerDefault();
 })
 
