@@ -45,7 +45,13 @@ a{text-decoration:none;cursor:pointer;}
 @keyframes stretchdelay { 0%, 40%, 100% {transform: scaleY(0.4);-webkit-transform: scaleY(0.4);}  20% {transform: scaleY(1.0);-webkit-transform: scaleY(1.0);}}
 
 /* 弹出框的样式 */
-.alert-wrap{width:30rem;position: fixed;top:50%;z-index:11111;border-radius:3px;overflow:hidden;}
+.alert-wrap{width:30rem;position: fixed;top:15rem;z-index:11111;border-radius:3px;overflow:hidden;left:0;right:0;margin:0 auto;background-color: #fff;-webkit-animation: alert .3s 1 ease-in-out;animation: alert .3s 1 ease-in-out;}
+.alert-hd{height:3.18rem;text-align: center;font-size:1.6rem;padding:1.93rem 0 .57rem;line-height: 3.18rem;color:#333;}
+.alert-bd{height:4.16rem;padding-bottom: 1.04rem;text-align: center;color:#999;padding:0 2.3rem;font-size:1.6rem;}
+.alert-ft{height:4.8rem;line-height: 4.8rem;border-top:1px solid #d5d5d6;color:#f90;text-align: center;font-size: 1.8rem;}
+.alert-ft:active{background-color: #EEE;}
+@-webkit-keyframes alert {from {top:13rem;width:32rem;opacity:.6;} to {top:15rem;width:30rem;opacity:1;}}
+@keyframes alert {from {top:13rem;width:32rem;opacity:.6;} to {top:15rem;width:30rem;opacity:1;}}
 
 
 /* 有下载app的样式，没有时直接remove掉has-download-app */

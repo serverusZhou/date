@@ -35,6 +35,7 @@ require(['jquery','service','promise','config'], function($,Service,promise,conf
 	service.stopBrowerdefaultEvent(function(){
 		console.log("下拉刷新");
 	});
+	service.alert("提示","消息已经成功发送！")
 	//topBowerDefault();
 })
 
