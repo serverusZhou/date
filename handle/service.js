@@ -22,6 +22,10 @@ define(['jquery','staticPath','weixinShare','weixinPay','promise','artTemplate',
 				localStorage.setItem("fd_id",data.id);
 				self.setUpPage();
 				self.pageChange();
+				self.stopBrowerdefaultEvent(function(){
+					self.setUpPage();
+					self.pageChange();
+				})
 			}
 		})
 	}
