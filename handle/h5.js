@@ -189,7 +189,9 @@ require(['jquery','service','promise','staticPath','jquery.toJSON'], function($,
 				'address1' : response.restaurant_addresses.address1,
 			}
 			//是否已经付款
-			var isAlreadyPaid = (response.payment_aa.status == "PAID");
+			var isAlreadyPaid = false;
+			if(response.payment_aa)
+				isAlreadyPaid=(response.payment_aa.status == "PAID");
 
 			//是否是邀请人
 			var isInititor = false;
