@@ -432,12 +432,18 @@ define(['jquery','staticPath','weixinShare','weixinPay','promise','artTemplate',
 	}
 
 	//弹框alert
-	H5Funcs.prototype.alert=function(time){
+	H5Funcs.prototype.alert=function(title,conent){
 		var alerts={
 				confirmHtml:function(){
-					html='<div class="page_mask"> id="exalert"';
-					html+='<div class="exalert">';
-					html+='<div class="exalertmsg">'+msg;
+					html='<div class="page_mask" id="fd-alert">';
+					html+='<div class="alert-wrap">';
+					html+='<div class="alert-hd">';
+					html+='<strong>'+title+'</strong>';
+					html+='</div>';
+					html+='<div class="alert-bd">';
+					html+=conent;
+					html+='</div>';
+					html+='<div class="alert-ft" id="alert-sure">确定';
 					html+='</div>';
 					html+='</div>';
 					html+='</div>';
@@ -446,15 +452,14 @@ define(['jquery','staticPath','weixinShare','weixinPay','promise','artTemplate',
 				init:function(){
 					alerts.destory();
 					$("body").before(alerts.confirmHtml());
-					setTimeout(function(){
-						alerts.destory();
-						if(linkurl){
-							location.href=linkurl;
-						}
-					},1500);
+					$("#alert-sure").unbind("click").bind("click",function(){
+						$("#fd-alert").animate({opacity:0},100,function(){
+							alerts.destory();
+						})
+					})
 				},
 				destory:function(){
-						$(".exalert").remove();
+						$("#fd-alert").remove();
 				}
 		}
 		alerts.init();
