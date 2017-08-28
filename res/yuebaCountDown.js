@@ -35,6 +35,8 @@ define(['jquery'],function($){
 			var wholeTime =  settings.time;
 			var path = location.href;
 			$("#"+id).html(countDownHtml);
+			if(settings.isContinue)
+				return
 			var rightTime = wholeTime;
 			var conutInte = setInterval(function(){
 				if(rightTime === false || path != location.href)

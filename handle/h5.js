@@ -15,6 +15,7 @@
 			 "watch":"../plugins/watch.min",
 			 "countDown":"../res/yuebaCountDown",
 			 "weixin": "../plugins/jweixin-1.0.0",
+			 "md5": "../plugins/md5",
 		  },
 	shim:{
 	    'jquery.toJSON':{
@@ -34,14 +35,35 @@ require(['jquery','service','promise','staticPath','jquery.toJSON'], function($,
 				init : function(){
 					return homePageInit(service,this.data);
 				},
-				after : function(){
-					homeInitAfter(service,this.data);
+				after : function(isContinue){
+					homeInitAfter(service,this.data,isContinue);
 				},
 				methods : {
 					"downloadApp":function(){
-						
+						location.href = "http://a.app.qq.com/o/simple.jsp?pkgname=agilie.fandine&g_f=991653";
 					},
-					"goWeChatPayPage":function(){
+					"getAccept":function(){
+						var requestData='{"user_id":"'+localStorage.getItem("fd_id")+'"}';
+						$.ajax({
+							type: "put",
+							async: true,
+							url: service.formatUrl(apis.acceptInvite,{'order_id' : localStorage.getItem("orderId")}),
+							data : requestData,
+							traditional: true,
+							dataType: "json",
+							headers :{
+								'Authorization' : "Bearer "+ localStorage.getItem("Authorization")
+							},
+							contentType: 'application/json',
+						}).then(function(){
+							alert("接受邀请成功");
+							location.href="#wechatPay";
+						},function(){
+							alert("接受邀请失败");
+							location.href="#wechatPay";
+						})
+					},
+					"goToWeChatPage" : function(){
 						location.href="#wechatPay";
 					},
 					"showDetails":function(){
@@ -50,7 +72,6 @@ require(['jquery','service','promise','staticPath','jquery.toJSON'], function($,
 							$("#is-show-details-btn").html("展开详情");
 							$("#order-details").fadeOut(300);
 						}else{
-
 							var timeAchole = $("#time-achole").offset().top-screen.width/375*10*4;
 							$("#is-show-details-btn").attr("class","opened");
 							$("#is-show-details-btn").html("收起详情");
@@ -66,8 +87,8 @@ require(['jquery','service','promise','staticPath','jquery.toJSON'], function($,
 				init : function(){
 					return wechatPayPageInit(service,this.data);
 				},
-				after : function(){
-					wechatPayInitAfter(service,this.data);
+				after : function(isContinue){
+					wechatPayInitAfter(service,this.data,isContinue);
 				},
 				methods : {
 					"pay":function(){
@@ -112,8 +133,8 @@ require(['jquery','service','promise','staticPath','jquery.toJSON'], function($,
 		})
 		return p
 	}
-	var homeInitAfter =  function(service,data){
-		service.setCountDown(data.remainTime,"time-count-down","colorful");
+	var homeInitAfter =  function(service,data,isContinue){
+		service.setCountDown(data.remainTime,"time-count-down","colorful",isContinue);
 	}
 
 	var wechatPayPageInit = function (service,pageData){
@@ -139,24 +160,6 @@ require(['jquery','service','promise','staticPath','jquery.toJSON'], function($,
 			}
 		}).then(function(response){
 			setPageData(response,pageData,service);
-			var requestData='{"user_id":"'+localStorage.getItem("fd_id")+'"}';
-			$.ajax({
-				type: "put",
-				async: true,
-				url: service.formatUrl(apis.acceptInvite,{'order_id' : localStorage.getItem("orderId")}),
-				data : requestData,
-				traditional: true,
-				dataType: "json",
-				headers :{
-					'Authorization' : "Bearer "+ localStorage.getItem("Authorization")
-				},
-				contentType: 'application/json',
-			}).then(function(){
-				alert("接受邀请成功");
-			},function(){
-				alert("接受邀请失败");
-				p.done("接受邀请失敗","failed");
-			})
 			p.done(response,"success");
 			service.pageLoadingEnd();
 		},function(response){
@@ -165,8 +168,8 @@ require(['jquery','service','promise','staticPath','jquery.toJSON'], function($,
 		return p
 	}
 
-	var wechatPayInitAfter =  function(service,data){
-		service.setCountDown("1990-09-05","pay-time-count-down","common");
+	var wechatPayInitAfter =  function(service,data,isContinue){
+		service.setCountDown(5*60*1000,"pay-time-count-down","common",isContinue);
 	}
 
 	//设置页面参数
@@ -207,9 +210,11 @@ require(['jquery','service','promise','staticPath','jquery.toJSON'], function($,
 
 			//是否已经全部被预订
 			var isAllTakeinviters = false;
-			if(response.customers_count == response.customers.length)
+			if(response.payment_aa_invitee_amount == response.customers.length)
 				isAllTakeinviters = true;
-			var isOrderClosed =(response.status == "closed");
+			var isOrderClosed = (response.status == "CLOSED");
+			if(isOrderClosed)
+				$("#main-body").removeClass("has-footer");
 
 			var rewardMoney = 0;
 			if(response.user.user_id == localStorage.getItem("fd_id"))
@@ -230,6 +235,9 @@ require(['jquery','service','promise','staticPath','jquery.toJSON'], function($,
 			$.each(response.order_items,function(i,value){
 				catalogueAll.push(value.item_name+"x"+value.quantity);
 			})
+
+			var isInititor
+			var isTakeInviter
 			pageData.orderInfo = {
 				'isAllTakeinviters' : isAllTakeinviters,
 				'isOrderClosed' : isOrderClosed,
@@ -241,7 +249,7 @@ require(['jquery','service','promise','staticPath','jquery.toJSON'], function($,
 				'alreadyPaidCustomerNumber' : response.customers_count,
 				'effective_date' : service.timeStamp2String(endDate).substring(0,16),
 				'catalogueAll' : catalogueAll.toString(),
-				'inititorMobile' : inititorMobile.substring(2,5)+"****"+inititorMobile.substring(9,14),
+				'inititorMobile' : (!isInititor && !isTakeInviter) ? inititorMobile.substring(2,5)+"****"+inititorMobile.substring(9,14) : inititorMobile.substring(2,14),
 			}
 	}
 
