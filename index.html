@@ -31,8 +31,13 @@
     <!-- 主体部分 -->
     <div class="main-body">
       <div class="count-down" id="time-achole">
+        {{if orderInfo.isOrderClosed}}
+        <p>拼单已结束</p>
+        {{/if}}
+        {{if !orderInfo.isOrderClosed}}
         <p>距离拼单结束还有</p>
         <div class="remain-time ib_dis_content" id="time-count-down"></div>
+        {{/if}}
       </div>
       <div class="share-people">
         <div class="share-people-pic ib_dis_content">
@@ -40,7 +45,7 @@
           {{each headCuts}}
             <div class="pic-wap {{$value.role=='INITIATOR'?'initiator':''}}">
               <div class="head-short-cut">
-                <img src="{{$value.avatar_path}}" />
+                <img src="{{$value.avatar_path}}" onerror = "this.src='img/logo_fandien_h5.png'"/>
               </div>
             </div>
           {{/each}}
@@ -77,25 +82,28 @@
           </div>
         </div>
       </div>
+      <footer class="accep-invitation" fd-click="getAccept()">
+                    接受邀请
+                </footer>
       <!-- 订单没有关闭 -->
-      {{if !isOrderClosed}}
+      {{if !orderInfo.isOrderClosed}}
           <!-- 是邀请人 -->
-          {{if isInititor}}
+          {{if orderInfo.isInititor}}
 
           {{/if}}
           <!-- 不是邀请人 -->
-         {{if !isInititor}}
+         {{if !orderInfo.isInititor}}
           <!-- 已经接受邀请 -->
           {{if orderInfo.isTakeInviter}}
             <!-- 是否已经支付 -->
-            {{if isAlreadyPaid}}
-              <footer class="accep-invitation" fd-click="goWeChatPayPage()">
+            {{if orderInfo.isAlreadyPaid}}
+              <footer class="accep-invitation">
                   您已接受邀请(白底红字 支付了)
               </footer>
             {{/if}}
             <!-- 没有支付 -->
-            {{if !isAlreadyPaid}}
-              <footer class="accep-invitation" fd-click="goWeChatPayPage()">
+            {{if !orderInfo.isAlreadyPaid}}
+              <footer class="accep-invitation" fd-click="goToWeChatPage()">
                   您已接受邀请，立即支付
               </footer>
             {{/if}}
@@ -103,18 +111,19 @@
            <!-- 不是邀请人 -->
           {{if !orderInfo.isTakeInviter}}
               {{if !orderInfo.isAllTakeinviters}}
-                <footer class="accep-invitation" fd-click="goWeChatPayPage()">
+                <footer class="accep-invitation" fd-click="getAccept()">
                     接受邀请
                 </footer>
               {{/if}}
               {{if orderInfo.isAllTakeinviters}}
-                <footer class="accep-invitation">
+                <footer class="accep-invitation" fd-click="getAccept()">
                     被预定完了，但是还有机会哦
                 </footer>
               {{/if}}
           {{/if}}
         {{/if}}
       {{/if}}
+
 
   </script>
   <!-- 跳转微信支付详情页面 -->

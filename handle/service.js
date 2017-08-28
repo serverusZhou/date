@@ -20,12 +20,13 @@ define(['jquery','staticPath','weixinShare','weixinPay','promise','artTemplate',
 		self.wxGetUserInfo().then(function(data,msg){
 			if(msg == "success"){
 				localStorage.setItem("fd_id",data.id);
+				localStorage.setItem("open_socialAccId",data.id);
 				self.setUpPage();
 				self.pageChange();
-				self.stopBrowerdefaultEvent(function(){
-					self.setUpPage();
-					self.pageChange();
-				})
+				// self.stopBrowerdefaultEvent(function(){
+				// 	self.setUpPage();
+				// 	self.pageChange();
+				// })
 			}
 		})
 	}
@@ -40,17 +41,30 @@ define(['jquery','staticPath','weixinShare','weixinPay','promise','artTemplate',
 			self.renderPage(config.pageMap["404"].contentId,config.pageMap["404"].templateId,{},{});
 			return
 		}
+		var isContinue = false;
 		self.pagesData[pageTitle].init().then(function(){
 			$("#main-body").animate({opacity:0},100,function(){
 				self.renderPage(pageObj.contentId,pageObj.templateId,self.pagesData[pageTitle].data,self.pagesData[pageTitle].methods);
-				self.watchAllData(self.pagesData[pageTitle].data,function(){
-					self.renderPage(pageObj.contentId,pageObj.templateId,self.pagesData[pageTitle].data,self.pagesData[pageTitle].methods);
-				})
-				self.pagesData[pageTitle].after();
+				// self.watchAllData(self.pagesData[pageTitle].data,function(){
+				// 	self.renderPage(pageObj.contentId,pageObj.templateId,self.pagesData[pageTitle].data,self.pagesData[pageTitle].methods);
+				// })
+				self.pagesData[pageTitle].after(isContinue);
 				$("#main-body").animate({opacity:1});
 			})
 		},function(){
 
+		})
+		self.stopBrowerdefaultEvent(function(){
+			self.pagesData[pageTitle].init().then(function(){
+				self.renderPage(pageObj.contentId,pageObj.templateId,self.pagesData[pageTitle].data,self.pagesData[pageTitle].methods);
+				// self.watchAllData(self.pagesData[pageTitle].data,function(){
+				// 	self.renderPage(pageObj.contentId,pageObj.templateId,self.pagesData[pageTitle].data,self.pagesData[pageTitle].methods);
+				// })
+				isContinue = true;
+				self.pagesData[pageTitle].after(isContinue);
+			},function(){
+				alert("刷新失败，请重试");
+			})
 		})
 	}
 
@@ -329,11 +343,12 @@ define(['jquery','staticPath','weixinShare','weixinPay','promise','artTemplate',
 	}
 
 	//倒计时
-	H5Funcs.prototype.setCountDown=function(time,id,type){
+	H5Funcs.prototype.setCountDown=function(time,id,type,isContinue){
 		new CountDown({
 			"time":time,
 			"id":id,
-			"type":type
+			"type":type,
+			"isContinue" : isContinue,
 		});
 	}
 
@@ -370,7 +385,6 @@ define(['jquery','staticPath','weixinShare','weixinPay','promise','artTemplate',
 			})
 		})
 		$.each(jsonArray,function(i,urlvalue){
-			console.log(urlvalue);
 			finalUrl+=urlvalue;
 		})
 		return finalUrl
@@ -421,7 +435,6 @@ define(['jquery','staticPath','weixinShare','weixinPay','promise','artTemplate',
 	H5Funcs.prototype.timeStamp2String = function(time){
 		var datetime = new Date();
 		datetime.setTime(time);
-		console.log("datetime",datetime);
 		var year = datetime.getFullYear();
 		var month = datetime.getMonth() + 1 < 10 ? "0" + (datetime.getMonth() + 1) : datetime.getMonth() + 1;
 		var date = datetime.getDate() < 10 ? "0" + datetime.getDate() : datetime.getDate();

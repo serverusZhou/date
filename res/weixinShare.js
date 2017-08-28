@@ -21,7 +21,7 @@ define(['weixin','config','sha1'], function(weixin,config,sha1){
 			timestamp:parseInt(configs.timestamp), // 必填，生成签名的时间戳
 			nonceStr: configs.noncestr, // 必填，生成签名的随机串
 			signature: signature,// 必填，签名，见附录1
-			jsApiList: ['onMenuShareAppMessage','chooseWXPay'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+			jsApiList: ['onMenuShareAppMessage','chooseWXPay','brandWCPay'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
 		});
 
 		weixin.ready(function() {

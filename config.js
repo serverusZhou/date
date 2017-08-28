@@ -29,6 +29,10 @@ define(function(){
 		// 	authPath : "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx72e523b991255618&redirect_uri=http%3a%2f%2fbgtest.natapp1.cc%2f&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect"
 		// }
 
+		var regularExpression = {
+			phoneRegular : ""
+		}
+
 		var weChartConfig = function(){
 			var appid = "wx72e523b991255618";
 			var secret = "103329cf0f68ece7f8717afc969eb7d3";
@@ -37,14 +41,14 @@ define(function(){
 			var redirect_uri ="http%3a%2f%2fbgtest.natapp1.cc%2f";
 			var authPath = "https://open.weixin.qq.com/connect/oauth2/authorize?appid="+appid+"&redirect_uri="+redirect_uri+"&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect";
 			var advShare = {
-				title : "就差个标题xxx",
-				noncestr : "活动很好，就差一个标题xxx",
-				img : ""
+				title : "超划算！我在饭蛋约你一起吃",
+				noncestr : "立即加入AA拼单，无限惊喜等你来分享，手慢无！",
+				img : "http://ownerweb.qa.services.fandanfanli.com/assets/img/icon_logo.png"
 			}
 			var activityShare = {
-				title : "就差个标题",
-				noncestr : "活动很好，就差一个标题",
-				img : ""
+				title : "超划算！我在饭蛋约你一起吃",
+				noncestr : "立即加入AA拼单，无限惊喜等你来分享，手慢无！",
+				img : "http://ownerweb.qa.services.fandanfanli.com/assets/img/icon_logo.png"
 			}
 			return {
 				appid : appid,
