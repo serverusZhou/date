@@ -30,6 +30,7 @@ define(['jquery'],function($){
 	}
 	CountDown.prototype={
 		init:function(settings,countDownHtml){
+			console.log("settingssettings",settings);
 			var self = this;
 			var id =  settings.id;
 			var wholeTime =  settings.time;
@@ -39,8 +40,16 @@ define(['jquery'],function($){
 				return
 			var rightTime = wholeTime;
 			var conutInte = setInterval(function(){
-				if(rightTime === false || path != location.href)
-				   clearInterval(conutInte);
+				if(rightTime === false || path != location.href){
+					clearInterval(conutInte);
+					if(rightTime === false){
+						if(typeof settings.func == "function"){
+							setTimeout(function(){
+								//settings.func();
+							},1000)
+						}
+					}
+				}
 				else
 				   rightTime = self.getMinusOneSeconeTime(rightTime);
 			},1000)

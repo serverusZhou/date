@@ -30,7 +30,7 @@ define(function(){
 		// }
 
 		var regularExpression = {
-			phoneRegular : ""
+			phoneRegular : "^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(18[0,5-9]))\\d{8}$",
 		}
 
 		var weChartConfig = function(){
@@ -64,7 +64,7 @@ define(function(){
 		/*
 		*判斷是否開啓微信調試模式
 		*/
-		var wxDebug=true;
+		var wxDebug=false;
 		/*
 		*項目域名地址
 		*/
@@ -75,6 +75,7 @@ define(function(){
 		*/
 		var authApiDomain="http://oauth.qa.services.fandanfanli.com";
 		var orderApiDomain="http://order.qa.services.fandanfanli.com";
+		var paymentApiDomain="http://payment.qa.services.fandanfanli.com";
 
 		/*
 		*判断是否只可以在微信登录
@@ -89,7 +90,8 @@ define(function(){
 				onlyWeChat : onlyWeChat,
 				weChartConfig : weChartConfig,
 				authApiDomain : authApiDomain,
-				orderApiDomain : orderApiDomain
+				orderApiDomain : orderApiDomain,
+				paymentApiDomain : paymentApiDomain
 			}
 		}
 	}

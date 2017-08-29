@@ -20,7 +20,7 @@ define(['jquery','staticPath','weixinShare','weixinPay','promise','artTemplate',
 		self.wxGetUserInfo().then(function(data,msg){
 			if(msg == "success"){
 				localStorage.setItem("fd_id",data.id);
-				localStorage.setItem("open_socialAccId",data.id);
+				localStorage.setItem("open_socialAccId",data.socialAccId);
 				self.setUpPage();
 				self.pageChange();
 				// self.stopBrowerdefaultEvent(function(){
@@ -63,7 +63,7 @@ define(['jquery','staticPath','weixinShare','weixinPay','promise','artTemplate',
 				isContinue = true;
 				self.pagesData[pageTitle].after(isContinue);
 			},function(){
-				alert("刷新失败，请重试");
+				self.alert("刷新失败，请重试");
 			})
 		})
 	}
@@ -140,25 +140,69 @@ define(['jquery','staticPath','weixinShare','weixinPay','promise','artTemplate',
 				imgUrl:imgUrl
 			})
 		},function(response){
-			alert("調用分享失敗");
+			console.error("調用分享失敗");
 		})
 	}
 
 	/*
 		*@explain進行微信支付
 	*/
-	H5Funcs.prototype.weixinPay=function(userid,mobile,Authorization){
+	H5Funcs.prototype.weixinPay=function(userid,mobile,Authorization,rightPersonMobile){
 		var self = this;
 		var p=new promise.Promise();
-		if(!mobile){
-			alert("您需要输入手机号！");
-			return
+
+		if(!(rightPersonMobile == mobile)){
+			self.setMobile(userid,mobile,Authorization).then(function(data,msg){
+				if(msg == "success"){
+					self.getOrderPayInfo(localStorage.getItem("out_trade_no"),localStorage.getItem("open_socialAccId"),Authorization).then(function(payData,msg){
+						if(msg == "success"){
+							weixinPay({
+								noncestr:payData.nonce_str,
+								timeStamp:payData.timestamp,
+								appid:payData.app_id,
+								package:payData.pkg,
+								pay_sign:payData.pay_sign,
+								func : function(){
+									$("#pay-suc").show();
+								}
+							})
+						}else{
+							self.alert("提示信息","获取支付信息接口出错！");
+						}
+					})
+				}else{
+					self.alert("提示信息",data);
+				}
+			})
+		}else{
+			self.getOrderPayInfo(localStorage.getItem("out_trade_no"),localStorage.getItem("open_socialAccId"),Authorization).then(function(payData,msg){
+				if(msg == "success"){
+					weixinPay({
+						noncestr:payData.nonce_str,
+						timeStamp:payData.timestamp,
+						appid:payData.app_id,
+						package:payData.pkg,
+						pay_sign:payData.pay_sign,
+						func : function(){
+							$("#pay-suc").show();
+						}
+					})
+				}else{
+					self.alert("提示信息","获取支付信息接口出错！");
+				}
+			})
 		}
-		var requestData='{"user_id":"'+userid+'","mobile":"'+mobile+'"}';
+	}
+
+	//获取支付信息
+	H5Funcs.prototype.getOrderPayInfo = function(out_trade_no,open_id,Authorization){
+		var self = this;
+		var p=new promise.Promise();
+		var requestData='{"method":"WECHATPAY","type":"AA","out_trade_no":"'+out_trade_no+'","open_id":"'+open_id+'"}';
 		$.ajax({
-			type: "put",
+			type: "post",
 			async: true,
-			url: self.formatUrl(apis.setMobile,{'order_id' : localStorage.getItem("orderId")}),
+			url: self.formatUrl(apis.getOrderInfo,{'order_id' : localStorage.getItem("orderId")}),
 			data : requestData,
 			dataType: "json",
 			contentType: 'application/json',
@@ -168,16 +212,39 @@ define(['jquery','staticPath','weixinShare','weixinPay','promise','artTemplate',
 		}).then(function(response){
 			p.done(response,"success");
 		},function(response){
-			p.done("手机号设置失败","failed");
-			alert("手机号设置失败");
+			p.done("获取订单支付失败","failed");
 		})
-		weixinPay({
-				noncestr:config.weChartConfig().noncestr,
-				timestamp:config.weChartConfig().timestamp,
-				appid:config.weChartConfig().appid
-			}
-		);
+		return p
 	}
+
+	//保存手机号
+	H5Funcs.prototype.setMobile = function(userid,mobile,Authorization){
+		var self = this;
+		var p=new promise.Promise();
+		if(!(/^1[3|4|5|8][0-9]\d{4,8}$/.test(mobile))){
+			p.done("请输入正确的手机号！","failed");
+		}else{
+			var requestData='{"user_id":"'+userid+'","mobile":"'+mobile+'"}';
+			$.ajax({
+				type: "put",
+				async: true,
+				url: self.formatUrl(apis.setMobile,{'order_id' : localStorage.getItem("orderId")}),
+				data : requestData,
+				dataType: "json",
+				contentType: 'application/json',
+				headers :{
+					'Authorization' : Authorization
+				}
+			}).then(function(response){
+				p.done(response,"success");
+			},function(response){
+				p.done("手机号设置失败","failed");
+				self.alert("手机号设置失败");
+			})
+		}
+		return p
+	}
+
 	/*
 		*@explain获取微信用户信息
 	*/
@@ -262,8 +329,12 @@ define(['jquery','staticPath','weixinShare','weixinPay','promise','artTemplate',
 	*/
 	H5Funcs.prototype.filterWecart = function(){
 		var self = this;
-		var notWechatBowerHtml = "<p>抱歉：</p>\
-								  <p>此页面需在微信中打开</p>";
+		var notWechatBowerHtml = '<div class="content-404">\
+									<div class="error-pin"></div>\
+									<div class="error-hanger">\
+										<span class="tip">抱歉<br>此页面需在微信中打开</span>\
+									</div>\
+								</div>';
 		if(!self.getAgentVersion().weixin){
 		   $("body").html(notWechatBowerHtml);
 			return false
@@ -292,8 +363,12 @@ define(['jquery','staticPath','weixinShare','weixinPay','promise','artTemplate',
 		var self = this;
 
 		var authCheck = self.filterWecartUserInfoCheck();
-		var pageErrorHtml = "<p>抱歉：</p>\
-							 <p>此页面参数有误，请获取正确的活动链接</p>";
+		var pageErrorHtml =  '<div class="content-404">\
+      							<div class="error-pin"></div>\
+      							<div class="error-hanger">\
+									<span class="tip">此页面参数有误，请获取正确的活动链接</span>\
+								</div>\
+      						  </div>';
 		if(authCheck == "activitypage"){
 			if(localStorage.getItem("enterStatus")=="1"){
 				localStorage.setItem("enterStatus","0")
@@ -343,12 +418,13 @@ define(['jquery','staticPath','weixinShare','weixinPay','promise','artTemplate',
 	}
 
 	//倒计时
-	H5Funcs.prototype.setCountDown=function(time,id,type,isContinue){
+	H5Funcs.prototype.setCountDown=function(time,id,type,isContinue,func){
 		new CountDown({
 			"time":time,
 			"id":id,
 			"type":type,
 			"isContinue" : isContinue,
+			"func" : func
 		});
 	}
 
@@ -372,8 +448,22 @@ define(['jquery','staticPath','weixinShare','weixinPay','promise','artTemplate',
 	H5Funcs.prototype.pageLoadingEnd=function(){
 		$("#page-loading").remove();
 	}
-
+	//页面加载
+	H5Funcs.prototype.pageLoadingCircle=function(){
+		var p = new promise.Promise();
+		$(".loding-area").animate({height:"6.5rem"},500,function(){
+			p.done("anmiEnd","success");
+		})
+		return p
+	}
 	//页面加载完成
+	H5Funcs.prototype.pageLoadingCircleEnd=function(){
+		$(".loding-area").animate({height:"0"},300)
+	}
+
+
+
+	//路径格式化
 	H5Funcs.prototype.formatUrl=function(url,params){
 		var jsonArray = url.split("$");
 		var finalUrl = "";
@@ -419,11 +509,12 @@ define(['jquery','staticPath','weixinShare','weixinPay','promise','artTemplate',
 				if(typeof func == "function"){
 					if(isInProgress){
 						isInProgress = false;
-						self.pageLoading();
+						self.pageLoadingCircle().then(function(){
+							func();
+						});
 						setTimeout(function(){
 							isInProgress = true;
 						},1000)
-						func();
 					}
 				}
 				event.preventDefault();
@@ -445,7 +536,7 @@ define(['jquery','staticPath','weixinShare','weixinPay','promise','artTemplate',
 	}
 
 	//弹框alert
-	H5Funcs.prototype.alert=function(title,conent){
+	H5Funcs.prototype.alert=function(title,conent,func){
 		var alerts={
 				confirmHtml:function(){
 					html='<div class="page_mask" id="fd-alert">';
@@ -468,6 +559,9 @@ define(['jquery','staticPath','weixinShare','weixinPay','promise','artTemplate',
 					$("#alert-sure").unbind("click").bind("click",function(){
 						$("#fd-alert").animate({opacity:0},100,function(){
 							alerts.destory();
+							if(typeof func == "function"){
+								func();
+							}
 						})
 					})
 				},

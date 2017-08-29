@@ -56,14 +56,26 @@ require(['jquery','service','promise','staticPath','jquery.toJSON'], function($,
 							},
 							contentType: 'application/json',
 						}).then(function(){
-							alert("接受邀请成功");
+							//alert("接受邀请成功");
 							location.href="#wechatPay";
 						},function(){
-							alert("接受邀请失败");
-							location.href="#wechatPay";
+							service.alert("提示信息","接受邀请失败");
 						})
 					},
-					"goToWeChatPage" : function(){
+					"goToWeChatPage" : function(accepTime1){
+						var countTime = 5*60*1000;
+						var checkTime = 0;
+						if(accepTime1){
+							var currentTime = (new Date()).getTime();
+							var accepTime = (new Date(accepTime1)).getTime();
+							checkTime = currentTime - accepTime;
+						}
+						if(checkTime > countTime){
+							service.alert("提示信息","您的订单已经过期,但是暂时先让你过去",function(){
+								location.href="#wechatPay";
+							});
+							return
+						}
 						location.href="#wechatPay";
 					},
 					"showDetails":function(){
@@ -91,9 +103,12 @@ require(['jquery','service','promise','staticPath','jquery.toJSON'], function($,
 					wechatPayInitAfter(service,this.data,isContinue);
 				},
 				methods : {
-					"pay":function(){
-						service.weixinPay(localStorage.getItem("fd_id"),$("#mobile-num").val(),"Bearer "+ localStorage.getItem("Authorization"));
+					"pay":function(rightPersonMobile){
+						service.weixinPay(localStorage.getItem("fd_id"),$("#mobile-num").val(),"Bearer "+ localStorage.getItem("Authorization"),rightPersonMobile);
 					},
+					"goBackToHome" : function(){
+						location.href="#home";
+					}
 				}
 			}
 		}
@@ -127,14 +142,23 @@ require(['jquery','service','promise','staticPath','jquery.toJSON'], function($,
 			setPageData(response,pageData,service);
 			p.done(response,"success");
 			service.pageLoadingEnd();
+			setTimeout(function(){
+				service.pageLoadingCircleEnd();
+			},1000)
 		},function(response){
 			p.done("获取订单信息失败","failed");
-			alert("获取订单信息失败");
+			service.alert("获取订单信息失败");
 		})
 		return p
 	}
 	var homeInitAfter =  function(service,data,isContinue){
-		service.setCountDown(data.remainTime,"time-count-down","colorful",isContinue);
+		if(!data.orderInfo.isOrderClosed){
+			service.setCountDown(data.remainTime,"time-count-down","colorful",isContinue,function(){
+				service.alert("提示信息","拼单时间已结束！",function(){
+					location.reload();
+				})
+			});
+		}
 	}
 
 	var wechatPayPageInit = function (service,pageData){
@@ -162,6 +186,7 @@ require(['jquery','service','promise','staticPath','jquery.toJSON'], function($,
 			setPageData(response,pageData,service);
 			p.done(response,"success");
 			service.pageLoadingEnd();
+			service.pageLoadingCircleEnd();
 		},function(response){
 			p.done("获取订单信息失败","failed");
 		})
@@ -169,11 +194,25 @@ require(['jquery','service','promise','staticPath','jquery.toJSON'], function($,
 	}
 
 	var wechatPayInitAfter =  function(service,data,isContinue){
-		service.setCountDown(5*60*1000,"pay-time-count-down","common",isContinue);
+		var countTime = 5*60*1000;
+		if(data.orderInfo.accepTime){
+			var currentTime = (new Date()).getTime();
+			var accepTime = (new Date(data.orderInfo.accepTime)).getTime();
+			countTime = countTime - (currentTime - accepTime);
+		}
+		service.setCountDown(countTime,"pay-time-count-down","common",isContinue,function(){
+			service.alert("提示信息","您的订单已过期",function(){
+				history.back();
+			})
+		});
 	}
 
 	//设置页面参数
 	var setPageData = function(response,pageData,service){
+			if(response.payment_aa)
+				localStorage.setItem("out_trade_no",response.payment_aa.out_trade_no);
+			else
+				console.error("there is no payment_aa,so there is no out_trade_no");
 			localStorage.setItem("restaurant_id",response.restaurant_id);
 			//设置倒计时时间
 			var endDate = (new Date(response.note.effective_date)).getTime();
@@ -195,7 +234,6 @@ require(['jquery','service','promise','staticPath','jquery.toJSON'], function($,
 			var isAlreadyPaid = false;
 			if(response.payment_aa)
 				isAlreadyPaid=(response.payment_aa.status == "PAID");
-
 			//是否是邀请人
 			var isInititor = false;
 			if(localStorage.getItem("fd_id") == response.user.user_id){
@@ -203,17 +241,26 @@ require(['jquery','service','promise','staticPath','jquery.toJSON'], function($,
 			}
 			//是否接受了邀请
 			var isTakeInviter = false;
+			var accepTime = "";
+			var rightPersonMobile = "";
 			$.each(response.customers,function(index,value){
-				if(value.user_id == localStorage.getItem("fd_id"))
+				if(value.user_id == localStorage.getItem("fd_id")){
 					isTakeInviter = true;
+					accepTime = value.create_time;
+					rightPersonMobile = value.mobile
+				}
 			})
-
 			//是否已经全部被预订
 			var isAllTakeinviters = false;
-			if(response.payment_aa_invitee_amount == response.customers.length)
+			if(response.note.customer_number == response.customers.length)
 				isAllTakeinviters = true;
 			var isOrderClosed = (response.status == "CLOSED");
-			if(isOrderClosed)
+
+			var isOrderFiled = (response.status == "FAILED")
+
+			var isOrderPending = (response.status == "PENDING")
+
+			if(isOrderClosed || isOrderFiled)
 				$("#main-body").removeClass("has-footer");
 
 			var rewardMoney = 0;
@@ -230,7 +277,6 @@ require(['jquery','service','promise','staticPath','jquery.toJSON'], function($,
 			$.each(response.customers,function(i,value){
 				pageData.headCuts[i] = value;
 			})
-
 			var catalogueAll = [];
 			$.each(response.order_items,function(i,value){
 				catalogueAll.push(value.item_name+"x"+value.quantity);
@@ -239,8 +285,13 @@ require(['jquery','service','promise','staticPath','jquery.toJSON'], function($,
 			var isInititor
 			var isTakeInviter
 			pageData.orderInfo = {
+				'rightPersonMobile' : rightPersonMobile,
+				'isAlreadyPaid' :isAlreadyPaid,
+				'accepTime' : accepTime,
 				'isAllTakeinviters' : isAllTakeinviters,
 				'isOrderClosed' : isOrderClosed,
+				'isOrderFiled' : isOrderFiled,
+				'isOrderPending' : isOrderPending,
 				'isInititor' : isInititor,
 				'isTakeInviter' : isTakeInviter,
 				'rewardMoney' : rewardMoney,

@@ -18,6 +18,13 @@
   <div class="max-content has-download-app has-footer" id="main-body"></div>
 
   <script id="home" type="text/html">
+    <div class="loding-area">
+      <div class="material-loader">
+        <svg class="circular">
+          <circle class="path" cx="30" cy="30" r="12" fill="none" stroke-width="3" stroke-miterlimit="6"></circle>
+        </svg>
+      </div>
+    </div>
     <!-- 下载饭蛋app -->
     <div class="download-app" id="download-app">
       <div class="download-des pull-left ib_dis_content">
@@ -27,14 +34,23 @@
       <div class="download-now pull-right" fd-click="downloadApp(perMoney,'good')">立即下载</div>
     </div>
     <!-- 广告部分 -->
-    <header class="adv"></header>
+    <header class="adv">
+      <a class="activity-rule" href="activity.html">活动规则</a>
+    </header>
     <!-- 主体部分 -->
     <div class="main-body">
       <div class="count-down" id="time-achole">
         {{if orderInfo.isOrderClosed}}
-        <p>拼单已结束</p>
+          {{if (orderInfo.isInititor || orderInfo.isTakeInviter)}}
+            <p>拼单已完成</p>
+          {{else}}
+            <p>拼单已结束</p>
+          {{/if}}
         {{/if}}
-        {{if !orderInfo.isOrderClosed}}
+        {{if orderInfo.isOrderFiled}}
+          <p class="un-suc">拼单未成功</p>
+        {{/if}}
+        {{if orderInfo.isOrderPending}}
         <p>距离拼单结束还有</p>
         <div class="remain-time ib_dis_content" id="time-count-down"></div>
         {{/if}}
@@ -51,8 +67,19 @@
           {{/each}}
         </div>
         <div class="share-detail">
-          <p><span class="per-money">￥{{orderInfo.payment_aa_invitee_amount}}/人</span>{{orderInfo.payment_aa_invitee_amount}}人拼单·已拼{{orderInfo.alreadyPaidCustomerNumber}}人</p>
-          <p>拼单成功后您将得到奖励金<span class="reward-money">¥{{orderInfo.rewardMoney}}</span>。</p>
+          {{if orderInfo.isOrderPending}}
+            <p><span class="per-money">￥{{orderInfo.payment_aa_invitee_amount}}/人</span>{{orderInfo.customer_number}}人拼单·已拼{{orderInfo.alreadyPaidCustomerNumber}}人</p>
+            <p>拼单成功后您将得到奖励金<span class="reward-money">¥{{orderInfo.rewardMoney}}</span>。</p>
+          {{/if}}
+          {{if orderInfo.isOrderFiled}}
+
+          {{/if}}
+          {{if orderInfo.isOrderClosed}}
+            <p><span class="per-money">￥{{orderInfo.payment_aa_invitee_amount}}/人</span>{{orderInfo.customer_number}}人拼单·已拼{{orderInfo.alreadyPaidCustomerNumber}}人</p>
+            {{if (orderInfo.isTakeInviter || orderInfo.isInititor)}}
+              <p>您已得到奖励金<span class="reward-money">¥{{orderInfo.rewardMoney}}</span>。</p>
+            {{/if}}
+          {{/if}}
         </div>
         <div class="order-detail">
           <div class="order-detail-title ib_dis_content">
@@ -63,13 +90,13 @@
                 <p class="detail-part-title">商家信息</p>
                 <div class="detail-spacies">
                     <p class="has-icon icon-home">{{restaurantInfo.restaurant_name}}</p>
-                    <p class="has-icon icon-position"><span>{{restaurantInfo.address1}}</span></p>
+                    <p class="has-icon icon-position no-border"><span>{{restaurantInfo.address1}}</span></p>
                 </div>
             </div>
             <div class="detail-part">
                 <p class="detail-part-title">赏味菜品</p>
                 <div class="detail-spacies">
-                    <p class="all-letters">{{orderInfo.catalogueAll}}</p>
+                    <p class="all-letters no-border">{{orderInfo.catalogueAll}}</p>
                 </div>
             </div>
             <div class="detail-part">
@@ -82,11 +109,8 @@
           </div>
         </div>
       </div>
-      <footer class="accep-invitation" fd-click="getAccept()">
-                    接受邀请
-                </footer>
       <!-- 订单没有关闭 -->
-      {{if !orderInfo.isOrderClosed}}
+      {{if (!orderInfo.isOrderClosed && !orderInfo.isOrderFiled)}}
           <!-- 是邀请人 -->
           {{if orderInfo.isInititor}}
 
@@ -97,13 +121,13 @@
           {{if orderInfo.isTakeInviter}}
             <!-- 是否已经支付 -->
             {{if orderInfo.isAlreadyPaid}}
-              <footer class="accep-invitation">
-                  您已接受邀请(白底红字 支付了)
+              <footer class="accep-invitation already-paid">
+                  您已接受邀请
               </footer>
             {{/if}}
             <!-- 没有支付 -->
             {{if !orderInfo.isAlreadyPaid}}
-              <footer class="accep-invitation" fd-click="goToWeChatPage()">
+              <footer class="accep-invitation" fd-click="goToWeChatPage(orderInfo.accepTime)">
                   您已接受邀请，立即支付
               </footer>
             {{/if}}
@@ -116,7 +140,7 @@
                 </footer>
               {{/if}}
               {{if orderInfo.isAllTakeinviters}}
-                <footer class="accep-invitation" fd-click="getAccept()">
+                <footer class="accep-invitation">
                     被预定完了，但是还有机会哦
                 </footer>
               {{/if}}
@@ -124,10 +148,24 @@
         {{/if}}
       {{/if}}
 
-
+      <!-- 已经支付+++++++++++++++++ -->
+      <!-- <div class="content-paid">
+        <div class="mobile-paid"></div>
+        <div class="suc-paid">
+          <p>您已成功付款<span>¥{{money}}</span></p>
+          <div class="paid-back">返回查看</div>
+        </div>
+      </div> -->
   </script>
   <!-- 跳转微信支付详情页面 -->
   <script id="wechatpay" type="text/html">
+    <div class="loding-area">
+      <div class="material-loader">
+        <svg class="circular">
+          <circle class="path" cx="30" cy="30" r="12" fill="none" stroke-width="3" stroke-miterlimit="6"></circle>
+        </svg>
+      </div>
+    </div>
     <div class="order-detail">
       <div class="order-detail-list wechat-pay-detail">
         <div class="wecharpay-count-down">
@@ -136,7 +174,7 @@
         </div>
         <div class="detail-part stick-border">
             <div class="detail-spacies">
-                <p class="form-like no-border"><input type="text" class="single" placeholder="输入手机号" id="mobile-num" /></p>
+                <p class="form-like no-border"><input type="text" class="single" placeholder="输入手机号" id="mobile-num" value="{{orderInfo.rightPersonMobile ? orderInfo.rightPersonMobile : ''}}"/></p>
             </div>
         </div>
         <div class="detail-part">
@@ -161,17 +199,30 @@
         </div>
       </div>
     </div>
-    <footer class="go-wecart-pay" fd-click="pay()">
+    <footer class="go-wecart-pay" fd-click="pay(orderInfo.rightPersonMobile)">
         <div class="count-total">总计：¥{{orderInfo.payment_aa_invitee_amount}}</div>
         <div class="chat-pay-btn" >微信支付</div>
     </footer>
+    <div class="content-paid" style="display:none;" id="pay-suc">
+      <div class="mobile-paid"></div>
+      <div class="suc-paid">
+        <p>您已成功付款¥{{orderInfo.payment_aa_invitee_amount}}</p>
+        <div class="paid-back" fd-click="goBackToHome()">返回查看</div>
+      </div>
+    </div>
   </script>
   <!-- 404页面 -->
   <script id="notfound" type="text/html">
     <div class="content-404">
-      <p class="user-name-404">亲爱的用户：</p>
+      <div class="error-pin"></div>
+      <div class="error-hanger">
+        error
+        <span>404</span>
+      </div>
+      <div></div>
+      <!-- <p class="user-name-404">亲爱的用户：</p>
       <p class="explain-404">&nbsp;&nbsp;&nbsp;&nbsp;十分抱歉，您的页面飞向火星去了，我们正在准备飞船前往寻找，请您不要着急。在此期间你可以到<a href="#">活动页面</a>去看看，我们为您准备了足够的惊喜。</p>
-      <p class="sign-404">--约吧404机动战队</p>
+      <p class="sign-404">--约吧404机动战队</p> -->
     </div>
   </script>
   <script src="plugins/require.js" data-main="handle/h5"></script>

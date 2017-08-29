@@ -6,6 +6,7 @@ define(['config'],function(config){
 		var orderApiDomain = config.orderApiDomain+"/v2/orders/$order_id$/simple_bill";//获取订单信息
 		var acceptInvite = config.orderApiDomain+"/v2/orders/$order_id$/take_part_in_aa";//接受
 		var setMobile = config.orderApiDomain+"/v2/orders/$order_id$/customer_mobile";//接受
+		var getOrderInfo = config.paymentApiDomain+"/v1/orders/$order_id$/payment/create";
 		return function(){
 			return {
 				wxshare:wxshare,
@@ -13,7 +14,8 @@ define(['config'],function(config){
 				wxUserInfo:wxUserInfo,
 				orderApiDomain : orderApiDomain,
 				acceptInvite : acceptInvite,
-				setMobile : setMobile
+				setMobile : setMobile,
+				getOrderInfo : getOrderInfo,
 			}
 		}
 	}

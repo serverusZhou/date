@@ -47,7 +47,7 @@ a{text-decoration:none;cursor:pointer;}
 /* 弹出框的样式 */
 .alert-wrap{width:30rem;position: fixed;top:15rem;z-index:11111;border-radius:3px;overflow:hidden;left:0;right:0;margin:0 auto;background-color: #fff;-webkit-animation: alert .3s 1 ease-in-out;animation: alert .3s 1 ease-in-out;}
 .alert-hd{height:3.18rem;text-align: center;font-size:1.6rem;padding:1.93rem 0 .57rem;line-height: 3.18rem;color:#333;}
-.alert-bd{height:4.16rem;padding-bottom: 1.04rem;text-align: center;color:#999;padding:0 2.3rem;font-size:1.6rem;}
+.alert-bd{min-height:4.16rem;padding-bottom: 1.04rem;text-align: center;color:#999;padding:0 2.3rem;font-size:1.6rem;}
 .alert-ft{height:4.8rem;line-height: 4.8rem;border-top:1px solid #d5d5d6;color:#f90;text-align: center;font-size: 1.8rem;}
 .alert-ft:active{background-color: #EEE;}
 @-webkit-keyframes alert {from {top:13rem;width:32rem;opacity:.6;} to {top:15rem;width:30rem;opacity:1;}}
@@ -65,11 +65,13 @@ a{text-decoration:none;cursor:pointer;}
 .max-content.has-download-app>div.download-app>div.download-now{width:9.7rem;height:2.6rem;background-color: #fff;color:#DB666E;line-height: 2.6rem;text-align: center;border-radius:3px;margin-right:.3rem;font-size:1.2rem;}
 
 /*大图部分*/
-.adv{width:100%;height:28.9rem;background: url(../img/adv_banner.png) no-repeat;background-size: 100%;}
+.adv{width:100%;height:28.9rem;background: url(../img/adv_banner.png) no-repeat;background-size: 100%;position: relative;}
+.activity-rule{position: absolute;width:7rem;height:2rem;border-radius:3px;z-index: 1;text-align: center;line-height: 2rem;font-size:1.2rem;background-color: rgba(0,0,0,.4);right:.2rem;top:1.5rem;color:#fff;}
 /*主体部分*/
 
 /*倒计时部分*/
 .count-down>p{height:2.8rem;line-height: 2.8rem;text-align: center;color:#D0021B;font-size: 2rem;font-weight: 700;margin:.6rem 0;}
+.count-down>p.un-suc{color:#333;}
 .remain-time{width:24.6rem;height:4.2rem;background: url(../img/count_down_bg.png);background-size: 100%;line-height: 4.2rem;text-align: center;}
 .remain-time>div.num{width:1.9rem;height:2.3rem;display: inline-block;background-color: #fff;border-radius: 3px;vertical-align: middle;font-size: 2rem;color:#D0021B;line-height: 2.3rem;text-align: center;font-weight: 700;}
 .remain-time>span{color:#fff;font-size: 1.8rem;}
@@ -90,6 +92,8 @@ a{text-decoration:none;cursor:pointer;}
 
 /*接受邀请*/
 .accep-invitation{width: 100%;height:5rem;line-height: 5rem;text-align: center;background-color: #D0021B;color:#fff;position: fixed;left:0;right:0;max-width: 640px;bottom:0;font-size: 1.4rem;z-index: 1111;}
+.accep-invitation.already-paid{border-top:1px #f1F1F1 solid;background-color: #fff;color:#D0021B}
+
 
 /*邀请订单详情*/
 .order-detail-title{text-align: center;height: 4rem;line-height: 4rem;}
@@ -98,20 +102,22 @@ a{text-decoration:none;cursor:pointer;}
 .order-detail-title>span.closed:after{background: url(../img/pulldown.png) no-repeat;background-size: 1.3rem;background-position: center center;}
 .order-detail-title>span.opened:after{background: url(../img/pullup.png) no-repeat;background-size: 1.3rem;background-position: center center;}
 
-.order-detail-list{border:1px #999 dotted;width:33rem;margin:0 auto 3rem;padding-bottom:2.5rem;}
-.detail-part-title{width:30.4rem;height:5.4rem;font-size:1.5rem;text-align: center;color: #333;margin:0 auto;line-height: 5.4rem;border-bottom: 1px #E0E0E0 solid;font-weight: 700;}
+.order-detail-list{width:33rem;margin:0 auto 3rem;padding-bottom:2.5rem;background: url(../img/border.png) no-repeat;background-size: 100% 100%;}
+.detail-part-title{width:30.4rem;height:5.4rem;font-size:1.5rem;text-align: center;color: #333;margin:0 auto;line-height: 5.4rem;border-bottom: 1px #F0F0F0 solid;font-weight: 700;}
 .detail-spacies{width:30.4rem;margin: 0 auto;}
 .detail-part{width:37.5rem;margin-left:-2.25rem;}
-.detail-part.stick-border{border-bottom: 10px #FAFAFA solid;}
-.detail-spacies>p{font-size:1.4rem;border-bottom: 1px #E0E0E0 solid;}
+.detail-part.stick-border{border-bottom: 10px #F0F0F0 solid;}
+.detail-spacies>p{font-size:1.4rem;border-bottom: 1px #F0F0F0 solid;}
 .detail-spacies>p.all-letters{line-height: 2.2rem;padding:.7rem .5rem;}
+.detail-spacies>p.all-letters.no-border{border:none;}
 .detail-spacies>p.form-like{padding:0 .5rem;height:5.4rem;line-height: 5.4rem;}
 .detail-spacies>p.form-like.no-border{border : none;}
 .detail-spacies>p.form-like>span{height: 5.4rem;line-height: 5.4rem;text-align: left;display: inline-block;}
 .detail-spacies>p.form-like>span:first-child{width:11rem;}
 .detail-spacies>p.stick-border{border-bottom: 10px #FAFAFA solid;}
+.detail-spacies>p.no-border{border:none;}
 /*付款页面*/
-.order-detail-list.wechat-pay-detail{border:none;padding-bottom:0;margin:0 auto;}
+.order-detail-list.wechat-pay-detail{border:none;padding-bottom:0;margin:0 auto;background: none;}
 .detail-spacies>p.form-like>input[type="text"].single{width:100%;height:100%;border:none;outline: none;font-size: 1.4rem;}
 
 .go-wecart-pay{width: 100%;height:5rem;line-height: 5rem;text-align: right;background-color: #fff;color:#fff;position: fixed;left:0;right:0;max-width: 640px;bottom:0;font-size: 1.4rem;z-index: 1111;}
@@ -125,6 +131,14 @@ a{text-decoration:none;cursor:pointer;}
 .wecharpay-remain-time{width:24.6rem;height:2.1rem;background-size: 100%;line-height: 2.1rem;text-align: center;margin-bottom: .2rem;}
 .wecharpay-remain-time>div.num{height:2.1rem;display: inline-block;background-color: #fff;border-radius: 3px;vertical-align: middle;font-size: 1.8rem;color:#333;line-height: 2.1rem;text-align: center;}
 .wecharpay-remain-time>span{color:#333;font-size: 1.8rem;}
+/*404*/
+.error-pin{width:2.8rem;height:2.8rem;display:block;margin:auto;margin-bottom:-2.7rem;z-index:10;position:relative;background:url("../img/error-pin.png") no-repeat center center;background-size:100%;margin-top:5rem;}
+.error-hanger{width:18rem;height:14rem;padding:7rem 1.6rem 0 1.6rem;position:relative;margin:auto;margin-bottom:2rem;z-index:5;line-height:1;font-size:3.2rem;text-align:center;background:url("../img/error-hanger.png") no-repeat center center;background-size:100%;transform-origin:center top;animation:error-swing infinite 2s ease-in-out alternate;}
+.error-hanger>span{font-size: 9.6rem;display: block;}
+.error-hanger>span.tip{font-size:2rem;line-height: 3rem;padding-top:3rem;}
+@-webkit-keyframes error-swing{0%{-webkit-transform:rotate(1deg)}100%{-webkit-transform:rotate(-2deg)}}
+@-moz-keyframes error-swing{0%{-moz-transform:rotate(1deg)}100%{-moz-transform:rotate(-2deg)}}
+@keyframes error-swing{0%{transform:rotate(1deg)}100%{transform:rotate(-2deg)}}
 .user-name-404{font-size:1.8rem;height:5rem;line-height: 5rem;}
 .content-404{width:80%;margin:0 auto;font-size: 1.4rem;line-height: 2rem;}
 .sign-404{text-align: right; font-size: 1.8rem;}
@@ -152,3 +166,19 @@ a{text-decoration:none;cursor:pointer;}
 .activity-line3{width: 1.2rem;height: 8.9rem;background: url(../img/line1.png);background-size: 100% 100%;position: absolute;z-index: 11;}
 .activity-line3.activity-line31{top:32.9rem;left:5.3rem;}
 .activity-line3.activity-line32{top:32.9rem;right:5.3rem;}
+
+/*成功付款页面*/
+.content-paid{position:fixed;width:100%;height:100%;top:0;left:0;background-color:#fff;z-index: 1111;}
+.suc-paid{height:20.6rem;position: absolute;width:100%;padding-top:2.7rem;bottom:0;border-top:1px #ccc solid;z-index:333;background-color:#fff;}
+.suc-paid>p{font-size: 2rem;line-height: 2.8rem;text-align: center;}
+.suc-paid>p>span{color:#d0021b;font-size: 2rem;}
+.paid-back{width:10rem;height:3rem;border-radius:3px;border:1px solid #3A8D1C;color:#3A8D1C;text-align: center;line-height: 3rem;margin:0 auto;margin-top:3rem;}
+.mobile-paid{position: absolute;z-index: 222;bottom:21rem;width:11rem;height:19.4rem;background: url(../img/paysuccess.png);background-size: 100%;left:0;right:0;margin:0 auto;}
+
+.loding-area{width:100%;height:0;background-color:#fff;position: relative;overflow: hidden;}
+.material-loader{position:absolute;width:60px;height:60px;top:0;left:0;z-index: 111;right:0;margin:0 auto;}
+.circular{animation:rotate 2s linear infinite;height:60px;position:relative;width:60px;}
+.path{stroke-dasharray:1,120;stroke-dashoffset:0;stroke:#B6463A;animation:dash 1.5s ease-in-out infinite,color 6s ease-in-out infinite;stroke-linecap:round}
+@keyframes rotate{100%{transform:rotate(360deg)}}
+@keyframes dash{0%{stroke-dasharray:1,120;stroke-dashoffset:0}50%{stroke-dasharray:54,120;stroke-dashoffset:-26}100%{stroke-dasharray:54,120;stroke-dashoffset:-74}}
+@keyframes color{0%,100%{stroke:#d62d20}40%{stroke:#0057e7}66%{stroke:#008744}80%,90%{stroke:#ffa700}}
