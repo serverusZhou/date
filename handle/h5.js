@@ -300,7 +300,7 @@ require(['jquery','service','promise','staticPath','jquery.toJSON'], function($,
 				'alreadyPaidCustomerNumber' : response.customers_count,
 				'effective_date' : service.timeStamp2String(endDate).substring(0,16),
 				'catalogueAll' : catalogueAll.toString(),
-				'inititorMobile' : (!isInititor && !isTakeInviter) ? inititorMobile.substring(2,5)+"****"+inititorMobile.substring(9,14) : inititorMobile.substring(2,14),
+				'inititorMobile' : (!isInititor && !isTakeInviter && !isAlreadyPaid) ? inititorMobile.substring(2,5)+"****"+inititorMobile.substring(9,14) : inititorMobile.substring(2,14),
 			}
 	}
 
