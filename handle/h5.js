@@ -71,9 +71,7 @@ require(['jquery','service','promise','staticPath','jquery.toJSON'], function($,
 							checkTime = currentTime - accepTime;
 						}
 						if(checkTime > countTime){
-							service.alert("提示信息","您的订单已经过期,但是暂时先让你过去",function(){
-								location.href="#wechatPay";
-							});
+							service.alert("提示信息","您的订单已经过期");
 							return
 						}
 						location.href="#wechatPay";
@@ -281,9 +279,6 @@ require(['jquery','service','promise','staticPath','jquery.toJSON'], function($,
 			$.each(response.order_items,function(i,value){
 				catalogueAll.push(value.item_name+"x"+value.quantity);
 			})
-
-			var isInititor
-			var isTakeInviter
 			pageData.orderInfo = {
 				'rightPersonMobile' : rightPersonMobile,
 				'isAlreadyPaid' :isAlreadyPaid,
@@ -300,7 +295,7 @@ require(['jquery','service','promise','staticPath','jquery.toJSON'], function($,
 				'alreadyPaidCustomerNumber' : response.customers_count,
 				'effective_date' : service.timeStamp2String(endDate).substring(0,16),
 				'catalogueAll' : catalogueAll.toString(),
-				'inititorMobile' : (!isInititor && !isTakeInviter && !isAlreadyPaid) ? inititorMobile.substring(2,5)+"****"+inititorMobile.substring(9,14) : inititorMobile.substring(2,14),
+				'inititorMobile' : (!isInititor && !isAlreadyPaid) ? inititorMobile.substring(2,5)+"****"+inititorMobile.substring(9,14) : inititorMobile.substring(2,14),
 			}
 	}
 

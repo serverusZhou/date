@@ -45,7 +45,7 @@ define(['jquery'],function($){
 					if(rightTime === false){
 						if(typeof settings.func == "function"){
 							setTimeout(function(){
-								//settings.func();
+								settings.func();
 							},1000)
 						}
 					}
