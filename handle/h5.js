@@ -10,7 +10,7 @@
 			 "weixinShare":"../res/weixinShare",
 			 "weixinPay":"../res/weixinpay",
 			 "staticPath":"../staticPath",
-			 "config":"../config",
+			 "config":"http://"+location.host+"/yueba/config.js?_T="+(new Date()).getTime(),
 			 "sha1":"../plugins/sha1",
 			 "watch":"../plugins/watch.min",
 			 "countDown":"../res/yuebaCountDown",
@@ -55,11 +55,15 @@ require(['jquery','service','promise','staticPath','jquery.toJSON'], function($,
 								'Authorization' : "Bearer "+ localStorage.getItem("Authorization")
 							},
 							contentType: 'application/json',
-						}).then(function(){
+						}).then(function(response){
 							//alert("接受邀请成功");
 							location.href="#wechatPay";
-						},function(){
-							service.alert("提示信息","接受邀请失败");
+						},function(response){
+							if(response.errorCode="DATA_CONFLICTED"){
+								service.alert("提示信息",response.messages.cn);
+							}else{
+								service.alert("提示信息","接受邀请失败！！");
+							}
 						})
 					},
 					"goToWeChatPage" : function(accepTime1){
@@ -150,9 +154,9 @@ require(['jquery','service','promise','staticPath','jquery.toJSON'], function($,
 		return p
 	}
 	var homeInitAfter =  function(service,data,isContinue){
-		if(!data.orderInfo.isOrderClosed){
+		if(!data.orderInfo.isOrderClosed && !data.orderInfo.isOrderFiled){
 			service.setCountDown(data.remainTime,"time-count-down","colorful",isContinue,function(){
-				service.alert("提示信息","拼单时间已结束！",function(){
+				service.alert("提示信息","拼单已结束！",function(){
 					location.reload();
 				})
 			});
@@ -184,7 +188,9 @@ require(['jquery','service','promise','staticPath','jquery.toJSON'], function($,
 			setPageData(response,pageData,service);
 			p.done(response,"success");
 			service.pageLoadingEnd();
-			service.pageLoadingCircleEnd();
+			setTimeout(function(){
+				service.pageLoadingCircleEnd();
+			},1000)
 		},function(response){
 			p.done("获取订单信息失败","failed");
 		})
@@ -267,7 +273,7 @@ require(['jquery','service','promise','staticPath','jquery.toJSON'], function($,
 			else
 				rewardMoney = response.payment_aa_reward.invitee_amount;
 
-			var emptyCustomerObj = {avatar_path:"../img/empty_circle.png"};
+			var emptyCustomerObj = {avatar_path:"img/empty_circle.png"};
 			pageData.headCuts = [];
 			for(var iid = 0;iid < response.note.customer_number;iid++){
 				pageData.headCuts.push(emptyCustomerObj);

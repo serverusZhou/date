@@ -15,6 +15,7 @@
 			 "watch":"../plugins/watch.min",
 			 "countDown":"../res/yuebaCountDown",
 			 "weixin": "../plugins/jweixin-1.0.0",
+			  "md5": "../plugins/md5",
 		  },
 	shim:{
 	    'jquery.toJSON':{
@@ -31,11 +32,17 @@ require(['jquery','service','promise','config'], function($,Service,promise,conf
 	*/
 	var service = new Service();
 	service.wxShare(config.weChartConfig().advShare.title,config.weChartConfig().advShare.noncestr,config.weChartConfig().advShare.img);
-	service.stopBrowerdefaultEvent();
-	service.stopBrowerdefaultEvent(function(){
-		console.log("下拉刷新");
-	});
-	service.alert("提示","消息已经成功发送！")
+	// service.stopBrowerdefaultEvent();
+	// service.stopBrowerdefaultEvent(function(){
+	// 	console.log("下拉刷新");
+	// });
+	//service.alert("提示","消息已经成功发送！")
+	service.pullFlash(".loding-area",50,function(e){
+		 var that = this;
+		 setTimeout(function () {
+			that.back.call();
+		}, 2000)
+	})
 	//topBowerDefault();
 })
 

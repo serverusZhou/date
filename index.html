@@ -72,7 +72,9 @@
             <p>拼单成功后您将得到奖励金<span class="reward-money">¥{{orderInfo.rewardMoney}}</span>。</p>
           {{/if}}
           {{if orderInfo.isOrderFiled}}
-
+              {{if (orderInfo.isTakeInviter || orderInfo.isInititor)}}
+                <p>本次拼单已被取消，钱款会退回到原来的支付渠道。</p>
+              {{/if}}
           {{/if}}
           {{if orderInfo.isOrderClosed}}
             <p><span class="per-money">￥{{orderInfo.payment_aa_invitee_amount}}/人</span>{{orderInfo.customer_number}}人拼单·已拼{{orderInfo.alreadyPaidCustomerNumber}}人</p>
@@ -141,21 +143,19 @@
               {{/if}}
               {{if orderInfo.isAllTakeinviters}}
                 <footer class="accep-invitation">
-                    被预定完了，但是还有机会哦
+                    有人还未付款，您还有机会，请等待
                 </footer>
               {{/if}}
           {{/if}}
         {{/if}}
       {{/if}}
-
-      <!-- 已经支付+++++++++++++++++ -->
-      <!-- <div class="content-paid">
-        <div class="mobile-paid"></div>
-        <div class="suc-paid">
-          <p>您已成功付款<span>¥{{money}}</span></p>
-          <div class="paid-back">返回查看</div>
-        </div>
-      </div> -->
+      {{if orderInfo.isOrderClosed}}
+          {{if orderInfo.isAlreadyPaid}}
+              <footer class="accep-invitation already-paid">
+                  您已接受邀请
+              </footer>
+            {{/if}}
+      {{/if}}
   </script>
   <!-- 跳转微信支付详情页面 -->
   <script id="wechatpay" type="text/html">

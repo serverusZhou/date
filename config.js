@@ -38,7 +38,7 @@ define(function(){
 			var secret = "103329cf0f68ece7f8717afc969eb7d3";
 			var noncestr = "Wm3WZYTPz0wzccnW";
 			var timestamp = "1414587457";
-			var redirect_uri ="http%3a%2f%2fbgtest.natapp1.cc%2f";
+			var redirect_uri ="http%3a%2f%2fwww.qa.fandanfanli.com%2fyueba%2f";
 			var authPath = "https://open.weixin.qq.com/connect/oauth2/authorize?appid="+appid+"&redirect_uri="+redirect_uri+"&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect";
 			var advShare = {
 				title : "超划算！我在饭蛋约你一起吃",
@@ -68,7 +68,7 @@ define(function(){
 		/*
 		*項目域名地址
 		*/
-		var domain="http://192.168.0.199:8080";
+		var domain="http://www.qa.fandanfanli.com";
 
 		/*
 		*接口域名
