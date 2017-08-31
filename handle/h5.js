@@ -75,7 +75,14 @@ require(['jquery','service','promise','staticPath','jquery.toJSON'], function($,
 							checkTime = currentTime - accepTime;
 						}
 						if(checkTime > countTime){
-							service.alert("提示信息","您的订单已经过期");
+							service.alert("提示信息","正在排队，请稍后",function(){
+								var currentTime = (new Date()).getTime();
+								var accepTime = (new Date(accepTime1)).getTime();
+								checkTime = currentTime - accepTime;
+								if( checkTime >  10*60*1000){
+									location.reload();
+								}
+							});
 							return
 						}
 						location.href="#wechatPay";
@@ -241,7 +248,7 @@ require(['jquery','service','promise','staticPath','jquery.toJSON'], function($,
 			//是否是邀请人
 			var isInititor = false;
 			if(localStorage.getItem("fd_id") == response.user.user_id){
-				isInititor = false;
+				isInititor = true;
 			}
 			//是否接受了邀请
 			var isTakeInviter = false;
