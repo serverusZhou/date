@@ -55,6 +55,14 @@ define(['jquery','staticPath','weixinShare','weixinPay','promise','artTemplate',
 
 		})
 		self.stopBrowerdefaultEvent(function(){
+			//如果在wechatPay页面，不让刷新，但是还有效果，哈哈
+			if(pageTitle == "wechatPay"){
+				self.pageLoadingEnd();
+				setTimeout(function(){
+					self.pageLoadingCircleEnd();
+				},1000)
+				return
+			}
 			self.pagesData[pageTitle].init().then(function(){
 				self.renderPage(pageObj.contentId,pageObj.templateId,self.pagesData[pageTitle].data,self.pagesData[pageTitle].methods);
 				// self.watchAllData(self.pagesData[pageTitle].data,function(){

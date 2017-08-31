@@ -3,7 +3,7 @@
 			 "jquery": "../plugins/jQuery-2.1.3.min",
 			 "jquery.toJSON":"../plugins/jquery.json.min",
 			 "jquery.fn.lazyload":"../plugins/lazyload",
-			 "service": "../handle/service",
+			 "service": "http://"+location.host+"/yueba/handle/service.js?_T="+(new Date()).getTime(),
 			 "artTemplate":"../plugins/template",
 			 "pt": "../res/pt",
 			 "promise":"../plugins/promise.min",
@@ -60,7 +60,8 @@ require(['jquery','service','promise','staticPath','jquery.toJSON'], function($,
 							location.href="#wechatPay";
 						},function(response){
 							if(response.errorCode="DATA_CONFLICTED"){
-								service.alert("提示信息",response.messages.cn);
+								eval("var responseBody = "+response.responseText);
+								service.alert("提示信息",responseBody.messages.cn);
 							}else{
 								service.alert("提示信息","接受邀请失败！！");
 							}
@@ -307,7 +308,7 @@ require(['jquery','service','promise','staticPath','jquery.toJSON'], function($,
 				'customer_number' : response.note.customer_number,
 				'alreadyPaidCustomerNumber' : response.customers_count,
 				'effective_date' : service.timeStamp2String(endDate).substring(0,16),
-				'catalogueAll' : catalogueAll.toString(),
+				'catalogueAll' : catalogueAll.toString().replace(/,/g," , "),
 				'inititorMobile' : (!isInititor && !isAlreadyPaid) ? inititorMobile.substring(2,5)+"****"+inititorMobile.substring(9,14) : inititorMobile.substring(2,14),
 			}
 	}
