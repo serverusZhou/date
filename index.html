@@ -48,7 +48,11 @@
           {{/if}}
         {{/if}}
         {{if orderInfo.isOrderFiled}}
-          <p class="un-suc">拼单未成功</p>
+          {{if (orderInfo.isInititor || orderInfo.isTakeInviter)}}
+            <p class="un-suc">拼单未成功</p>
+          {{else}}
+            <p>拼单已结束</p>
+          {{/if}}
         {{/if}}
         {{if orderInfo.isOrderPending}}
         <p>距离拼单结束还有</p>
