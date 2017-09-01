@@ -164,6 +164,11 @@ define(['jquery','staticPath','weixinShare','weixinPay','promise','artTemplate',
 				if(msg == "success"){
 					self.getOrderPayInfo(localStorage.getItem("out_trade_no"),localStorage.getItem("open_socialAccId"),Authorization).then(function(payData,msg){
 						if(msg == "success"){
+							setTimeout(function(){
+								self.alert("提示信息","如果页面没有跳转，请点击跳转！",function(){
+									location.href="#home";
+								})
+							},1000);
 							weixinPay({
 								noncestr:payData.nonce_str,
 								timeStamp:payData.timestamp,
@@ -172,6 +177,9 @@ define(['jquery','staticPath','weixinShare','weixinPay','promise','artTemplate',
 								pay_sign:payData.pay_sign,
 								func : function(){
 									$("#pay-suc").show();
+								},
+								finalFunc : function(){
+									$("#fd-alert").remove();
 								}
 							})
 						}else{
