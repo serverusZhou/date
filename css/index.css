@@ -177,8 +177,9 @@ a{text-decoration:none;cursor:pointer;}
 .paid-back{width:10rem;height:3rem;border-radius:3px;border:1px solid #3A8D1C;color:#3A8D1C;text-align: center;line-height: 3rem;margin:0 auto;margin-top:3rem;}
 .mobile-paid{position: absolute;z-index: 222;bottom:21rem;width:11rem;height:19.4rem;background: url(../img/paysuccess.png);background-size: 100%;left:0;right:0;margin:0 auto;}
 
-.loding-area{width:100%;height:30px;background-color:#fff;position: relative;overflow: hidden;width:30px;}
-.material-loader{position:absolute;width:60px;height:60px;top:0;left:0;z-index: 111;right:0;margin:0 auto;}
+.loding-area{width:100%;background-color:#fff;position: relative;overflow: hidden;width:30px;}
+.material-loader{position:absolute;top:0;left:0;z-index: 111;right:0;margin:0 auto;text-align: center;}
+.material-loader>img{width:2rem;height:2rem;}
 .circular{animation:rotate 2s linear infinite;height:60px;position:relative;width:60px;}
 .path{stroke-dasharray:1,120;stroke-dashoffset:0;stroke:#B6463A;animation:dash 1.5s ease-in-out infinite,color 6s ease-in-out infinite;stroke-linecap:round}
 @keyframes rotate{100%{transform:rotate(360deg)}}

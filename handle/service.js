@@ -158,17 +158,14 @@ define(['jquery','staticPath','weixinShare','weixinPay','promise','artTemplate',
 	H5Funcs.prototype.weixinPay=function(userid,mobile,Authorization,rightPersonMobile){
 		var self = this;
 		var p=new promise.Promise();
-
 		if(!(rightPersonMobile == mobile)){
 			self.setMobile(userid,mobile,Authorization).then(function(data,msg){
 				if(msg == "success"){
 					self.getOrderPayInfo(localStorage.getItem("out_trade_no"),localStorage.getItem("open_socialAccId"),Authorization).then(function(payData,msg){
 						if(msg == "success"){
-							setTimeout(function(){
-								self.alert("提示信息","如果页面没有跳转，请点击跳转！",function(){
-									location.href="#home";
-								})
-							},1000);
+							self.alert("提示信息","付款结束后，如果页面没有跳转，请点击跳转！",function(){
+								history.back();
+							})
 							weixinPay({
 								noncestr:payData.nonce_str,
 								timeStamp:payData.timestamp,
@@ -237,7 +234,7 @@ define(['jquery','staticPath','weixinShare','weixinPay','promise','artTemplate',
 	H5Funcs.prototype.setMobile = function(userid,mobile,Authorization){
 		var self = this;
 		var p=new promise.Promise();
-		if(!(/^1[3|4|5|8][0-9]\d{4,8}$/.test(mobile))){
+		if(!(/^1[3|4|5|7|8][0-9]\d{4,12}$/.test(mobile))){
 			p.done("请输入正确的手机号！","failed");
 		}else{
 			var requestData='{"user_id":"'+userid+'","mobile":"'+mobile+'"}';
@@ -254,8 +251,8 @@ define(['jquery','staticPath','weixinShare','weixinPay','promise','artTemplate',
 			}).then(function(response){
 				p.done(response,"success");
 			},function(response){
-				p.done("手机号设置失败","failed");
-				self.alert("手机号设置失败");
+				p.done("拼单已结束，不能付款","failed");
+				self.alert("提示信息","拼单已结束，不能付款");
 			})
 		}
 		return p
@@ -467,14 +464,28 @@ define(['jquery','staticPath','weixinShare','weixinPay','promise','artTemplate',
 	//页面加载
 	H5Funcs.prototype.pageLoadingCircle=function(){
 		var p = new promise.Promise();
-		$(".loding-area").animate({height:"6.5rem"},500,function(){
-			p.done("anmiEnd","success");
+		// $(".loding-area").css({
+		// 	"-webkit-transition": "all .3s",
+		// 	"transition": "all .3s"
+		// });
+		//  $(".loding-area").css({
+		// 	"-webkit-transform": "scaleY(2.1rem)",
+		// 	"transform": "scaleY(2.1rem)"
+		// });
+		$(".loding-area").animate({height:"2.1rem"},500,function(){
+			setTimeout(function(){
+				p.done("anmiEnd","success");
+			},300)
 		})
 		return p
 	}
 	//页面加载完成
 	H5Funcs.prototype.pageLoadingCircleEnd=function(){
-		$(".loding-area").animate({height:"0"},300)
+		$(".loding-area").animate({height:"0"},500)
+		// $(".loding-area").css({
+		// 	"-webkit-transform": "scaleY(0)",
+		// 	"transform": "scaleY(0)"
+		// });
 	}
 
 

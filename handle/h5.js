@@ -8,7 +8,7 @@
 			 "pt": "../res/pt",
 			 "promise":"../plugins/promise.min",
 			 "weixinShare":"../res/weixinShare",
-			 "weixinPay":"../res/weixinpay",
+			 "weixinPay":"http://"+location.host+"/yueba/res/weixinpay.js?_T="+(new Date()).getTime(),
 			 "staticPath":"../staticPath",
 			 "config":"http://"+location.host+"/yueba/config.js?_T="+(new Date()).getTime(),
 			 "sha1":"../plugins/sha1",
@@ -61,7 +61,9 @@ require(['jquery','service','promise','staticPath','jquery.toJSON'], function($,
 						},function(response){
 							if(response.errorCode="DATA_CONFLICTED"){
 								eval("var responseBody = "+response.responseText);
-								service.alert("提示信息",responseBody.messages.cn);
+								service.alert("提示信息",responseBody.messages.cn,function(){
+									location.reload();
+								});
 							}else{
 								service.alert("提示信息","接受邀请失败！！");
 							}
@@ -117,7 +119,7 @@ require(['jquery','service','promise','staticPath','jquery.toJSON'], function($,
 						service.weixinPay(localStorage.getItem("fd_id"),$("#mobile-num").val(),"Bearer "+ localStorage.getItem("Authorization"),rightPersonMobile);
 					},
 					"goBackToHome" : function(){
-						location.href="#home";
+						history.back();
 					}
 				}
 			}
@@ -132,6 +134,7 @@ require(['jquery','service','promise','staticPath','jquery.toJSON'], function($,
 			$("#main-body").addClass("has-download-app")
 		var p=new promise.Promise();
 		service.pageLoading();
+		service.pageLoadingCircle();
 		var data = {
 			'order_id':localStorage.getItem("orderId"),
 			'user_id' : localStorage.getItem("fd_id"),
@@ -157,7 +160,7 @@ require(['jquery','service','promise','staticPath','jquery.toJSON'], function($,
 			},1000)
 		},function(response){
 			p.done("获取订单信息失败","failed");
-			service.alert("获取订单信息失败");
+			service.alert("提示信息","获取订单信息失败");
 		})
 		return p
 	}
@@ -176,6 +179,7 @@ require(['jquery','service','promise','staticPath','jquery.toJSON'], function($,
 			$("#main-body").removeClass("has-download-app");
 		var p=new promise.Promise();
 		service.pageLoading();
+		service.pageLoadingCircle();
 		var data = {
 			'order_id':localStorage.getItem("orderId"),
 			'user_id' : localStorage.getItem("fd_id"),

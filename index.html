@@ -10,7 +10,7 @@
   <meta name="apple-touch-fullscreen" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <title>约吧</title>
-  <link rel="stylesheet" href="css/index.css?_T=15454454544" />
+  <link rel="stylesheet" href="css/index.css?_T=8524175632" />
 </head>
 
 <body class="max-content">
@@ -20,9 +20,10 @@
   <script id="home" type="text/html">
     <div class="loding-area">
       <div class="material-loader">
-        <svg class="circular">
+        <img src="img/loading.gif"/>
+        <!-- <svg class="circular">
           <circle class="path" cx="30" cy="30" r="12" fill="none" stroke-width="3" stroke-miterlimit="6"></circle>
-        </svg>
+        </svg> -->
       </div>
     </div>
     <!-- 下载饭蛋app -->
@@ -51,7 +52,7 @@
           {{if (orderInfo.isInititor || orderInfo.isTakeInviter)}}
             <p class="un-suc">拼单未成功</p>
           {{else}}
-            <p>拼单已结束</p>
+            <p class="un-suc">拼单已结束</p>
           {{/if}}
         {{/if}}
         {{if orderInfo.isOrderPending}}
@@ -165,9 +166,10 @@
   <script id="wechatpay" type="text/html">
     <div class="loding-area">
       <div class="material-loader">
-        <svg class="circular">
+        <!-- <svg class="circular">
           <circle class="path" cx="30" cy="30" r="12" fill="none" stroke-width="3" stroke-miterlimit="6"></circle>
-        </svg>
+        </svg> -->
+        <img src="img/loading.gif"/>
       </div>
     </div>
     <div class="order-detail">
