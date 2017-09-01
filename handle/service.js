@@ -163,8 +163,10 @@ define(['jquery','staticPath','weixinShare','weixinPay','promise','artTemplate',
 				if(msg == "success"){
 					self.getOrderPayInfo(localStorage.getItem("out_trade_no"),localStorage.getItem("open_socialAccId"),Authorization).then(function(payData,msg){
 						if(msg == "success"){
-							self.alert("提示信息","付款结束后，如果页面没有跳转，请点击跳转！",function(){
-								history.back();
+							self.blankClick(function(){
+								self.alert("提示信息","系统繁忙，请重试",function(){
+									history.back();
+								})
 							})
 							weixinPay({
 								noncestr:payData.nonce_str,
@@ -176,7 +178,7 @@ define(['jquery','staticPath','weixinShare','weixinPay','promise','artTemplate',
 									$("#pay-suc").show();
 								},
 								finalFunc : function(){
-									$("#fd-alert").remove();
+									$("#fd-blank-click").remove();
 								}
 							})
 						}else{
@@ -682,6 +684,31 @@ define(['jquery','staticPath','weixinShare','weixinPay','promise','artTemplate',
 				},
 				destory:function(){
 						$("#fd-alert").remove();
+				}
+		}
+		alerts.init();
+	}
+
+	//透明页面点击时间
+	H5Funcs.prototype.blankClick=function(func){
+		var alerts={
+				confirmHtml:function(){
+					html='<div class="page_mask" id="fd-blank-click">';
+					html+='</div>';
+					return html
+				},
+				init:function(){
+					alerts.destory();
+					$("body").before(alerts.confirmHtml());
+					$("#fd-blank-click").unbind("click").bind("click",function(){
+						alerts.destory();
+						if(typeof func == "function"){
+							func();
+						}
+					})
+				},
+				destory:function(){
+						$("#fd-blank-click").remove();
 				}
 		}
 		alerts.init();
