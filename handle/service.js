@@ -16,7 +16,7 @@ define(['jquery','staticPath','weixinShare','weixinPay','promise','artTemplate',
 		var self = this;
 		if(!self.enterPageFilter())//是否满足页面的过滤条件（微信浏览）
 		   return
-		self.wxShare(config.weChartConfig().activityShare.title,config.weChartConfig().activityShare.noncestr,config.weChartConfig().activityShare.img);//调用微信分享
+		//self.wxShare(config.weChartConfig().activityShare.title,config.weChartConfig().activityShare.noncestr,config.weChartConfig().activityShare.img);//调用微信分享
 		self.wxGetUserInfo().then(function(data,msg){
 			if(msg == "success"){
 				localStorage.setItem("fd_id",data.id);
@@ -252,9 +252,12 @@ define(['jquery','staticPath','weixinShare','weixinPay','promise','artTemplate',
 				}
 			}).then(function(response){
 				p.done(response,"success");
-			},function(response){
-				p.done("拼单已结束，不能付款","failed");
-				self.alert("提示信息","拼单已结束，不能付款");
+			},function(error){
+				console.log("error",error);
+				p.done("网络连接不稳定，请重试","failed");
+				self.alert("提示信息","网络连接不稳定，请重试");
+				//p.done("拼单已结束，不能付款","failed");
+				//self.alert("提示信息","拼单已结束，不能付款");
 			})
 		}
 		return p

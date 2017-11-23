@@ -38,17 +38,18 @@ define(function(){
 			var secret = "103329cf0f68ece7f8717afc969eb7d3";
 			var noncestr = "Wm3WZYTPz0wzccnW";
 			var timestamp = "1414587457";
-			var redirect_uri ="http%3a%2f%2fwww.qa.fandanfanli.com%2fyueba%2f";
+			//var redirect_uri ="http%3a%2f%2fwww.qa.fandanfanli.com%2fyueba%2f";//qa
+			var redirect_uri ="http%3a%2f%2fwww.fandanfanli.com%2fyueba%2f";
 			var authPath = "https://open.weixin.qq.com/connect/oauth2/authorize?appid="+appid+"&redirect_uri="+redirect_uri+"&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect";
 			var advShare = {
 				title : "超划算！我在饭蛋约你一起吃",
 				noncestr : "立即加入AA拼单，无限惊喜等你来分享，手慢无！",
-				img : "http://ownerweb.qa.services.fandanfanli.com/assets/img/icon_logo.png"
+				img : "http://ownerweb.services.fandanfanli.com/assets/img/icon_logo.png"
 			}
 			var activityShare = {
-				title : "超划算！我在饭蛋约你一起吃",
+				title : "超划算！我在饭蛋($restaurant_name$)约你一起吃",
 				noncestr : "立即加入AA拼单，无限惊喜等你来分享，手慢无！",
-				img : "http://ownerweb.qa.services.fandanfanli.com/assets/img/icon_logo.png"
+				img : "http://ownerweb.services.fandanfanli.com/assets/img/icon_logo.png"
 			}
 			return {
 				appid : appid,
@@ -68,14 +69,14 @@ define(function(){
 		/*
 		*項目域名地址
 		*/
-		var domain="http://www.qa.fandanfanli.com";
+		var domain="http://www.fandanfanli.com";
 
 		/*
 		*接口域名
 		*/
-		var authApiDomain="http://oauth.qa.services.fandanfanli.com";
-		var orderApiDomain="http://order.qa.services.fandanfanli.com";
-		var paymentApiDomain="http://payment.qa.services.fandanfanli.com";
+		var authApiDomain="http://oauth.beta.services.fandanfanli.com";
+		var orderApiDomain="http://order.beta.services.fandanfanli.com";
+		var paymentApiDomain="http://payment.beta.services.fandanfanli.com";
 
 		/*
 		*判断是否只可以在微信登录

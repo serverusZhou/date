@@ -21,7 +21,7 @@ define(['weixin','config','sha1'], function(weixin,config,sha1){
 			timestamp:parseInt(configs.timestamp), // 必填，生成签名的时间戳
 			nonceStr: configs.noncestr, // 必填，生成签名的随机串
 			signature: signature,// 必填，签名，见附录1
-			jsApiList: ['onMenuShareAppMessage','chooseWXPay','brandWCPay'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+			jsApiList: ['onMenuShareAppMessage','onMenuShareTimeline','onMenuShareQQ','onMenuShareWeibo','onMenuShareQZone','chooseWXPay','brandWCPay'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
 		});
 
 		weixin.ready(function() {
@@ -29,6 +29,15 @@ define(['weixin','config','sha1'], function(weixin,config,sha1){
 			*分享给微信好友
 			*/
 			weixin.onMenuShareAppMessage({
+				title:configs.title, // 分享标题
+				desc:configs.describe,//分享描述
+				link:configs.href,
+				imgUrl:configs.imgUrl
+			});
+			/*
+			*分享给朋友圈
+			*/
+			weixin.onMenuShareTimeline({
 				title:configs.title, // 分享标题
 				desc:configs.describe,//分享描述
 				link:configs.href,

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="description" id="description" content="约吧,分享" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="renderer" content="webkit" />
+  <meta name="apple-touch-fullscreen" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="x5-fullscreen" content="true">
+  <meta name="full-screen" content="yes">
+  <title>微信登录跳转</title>
+</head>
+<body class="max-content">
+  <script src="plugins/jQuery-2.1.3.min.js"></script>
+  <script>
+    function getQueryString(name){
+		location.href.replace(/%27/g,"'");
+		var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
+		var r = window.location.search.substr(1).match(reg);
+		if (r != null) {
+			return unescape(r[2]);
+		}
+		return null;
+    };
+
+  </script>
+  <script>
+    var appid = getQueryString("appid");
+    var back_url = getQueryString("back_url");
+    var code = getQueryString("code");
+    var redirect_uri = "http%3A%2F%2Fwww.fandanfanli.com%2Fyueba%2FauthRediretPage.html";
+    //var redirect_uri = "http%3A%2F%2Fwww.qa.fandanfanli.com%2Fyueba%2F";
+    var authUrl = "https://open.weixin.qq.com/connect/oauth2/authorize?appid="+appid+"&redirect_uri="+redirect_uri+"&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect";
+    if(code){
+        var back_url = localStorage.getItem("back_url");
+        localStorage.setItem("code",null);
+        location.href = back_url+"?code="+code;
+    }else{
+        localStorage.setItem("back_url",back_url);
+        location.href = authUrl;
+    }
+  </script>
+</body>
+
+</html>

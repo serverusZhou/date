@@ -26,7 +26,7 @@
 	    },
 	}
 });
-require(['jquery','service','promise','staticPath','jquery.toJSON'], function($,Service,promise,apis){
+require(['jquery','service','promise','staticPath','config','jquery.toJSON'], function($,Service,promise,apis,config){
 	/**页面初始化参数 */
 	var pagesSetting = function(service){
 		var setting={
@@ -152,6 +152,10 @@ require(['jquery','service','promise','staticPath','jquery.toJSON'], function($,
 				'Authorization' : "Bearer "+ localStorage.getItem("Authorization")
 			}
 		}).then(function(response){
+			console.log('service.wxShare');
+			console.log(config.weChartConfig().activityShare.title);
+			console.log(service.formatUrl(config.weChartConfig().activityShare.title,{'restaurant_name':response.restaurant_name}));
+			service.wxShare(service.formatUrl(config.weChartConfig().activityShare.title,{'restaurant_name':response.restaurant_name}),config.weChartConfig().activityShare.noncestr,config.weChartConfig().activityShare.img);//调用微信分享
 			setPageData(response,pageData,service);
 			p.done(response,"success");
 			service.pageLoadingEnd();
@@ -311,6 +315,7 @@ require(['jquery','service','promise','staticPath','jquery.toJSON'], function($,
 				'payment_aa_invitee_amount' : response.payment_aa_invitee_amount,
 				'customer_number' : response.note.customer_number,
 				'alreadyPaidCustomerNumber' : response.customers_count,
+				'alreadyPaidCustomers' :  response.customers,
 				'effective_date' : service.timeStamp2String(endDate).substring(0,16),
 				'catalogueAll' : catalogueAll.toString().replace(/,/g," , "),
 				'inititorMobile' : (!isInititor && !isAlreadyPaid) ? inititorMobile.substring(2,5)+"****"+inititorMobile.substring(9,14) : inititorMobile.substring(2,14),

@@ -86,7 +86,7 @@ a{text-decoration:none;cursor:pointer;}
 .share-people-pic>div.pic-wap.initiator:before{content:"发起人";display: block;position: absolute;left: 0;top:0;width: 3rem;text-align: center;font-size: .9rem;color:#fff;height: 1.3rem;line-height: 1.3rem;z-index: 11;background-color: #D0021B;}
 /*详情*/
 .share-detail>p{font-size: 1.4rem;text-align: center;line-height: 2.4rem;height:2.4rem;color:#666;}
-.share-detail>p:last-child{color:#333;}
+.share-detail>p.will-reword{color:#333;}
 .share-detail>p>span.per-money{font-size:2rem;color:#D0021B;}
 .share-detail>p>span.reward-money{color:#D0021B;}
 
