@@ -74,9 +74,9 @@ define(function(){
 		/*
 		*接口域名
 		*/
-		var authApiDomain="http://oauth.beta.services.fandanfanli.com";
-		var orderApiDomain="http://order.beta.services.fandanfanli.com";
-		var paymentApiDomain="http://payment.beta.services.fandanfanli.com";
+		var authApiDomain="http://oauth.services.fandanfanli.com";
+		var orderApiDomain="http://order.services.fandanfanli.com";
+		var paymentApiDomain="http://payment.services.fandanfanli.com";
 
 		/*
 		*判断是否只可以在微信登录
