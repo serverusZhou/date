@@ -249,6 +249,7 @@ require(['jquery','service','promise','staticPath','config','jquery.toJSON'], fu
 			pageData.restaurantInfo = {
 				'restaurant_name' : response.restaurant_name,
 				'address1' : response.restaurant_addresses.address1,
+				'city' : response.restaurant_addresses.city,
 			}
 			//是否已经付款
 			var isAlreadyPaid = false;

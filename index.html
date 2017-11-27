@@ -110,7 +110,7 @@
                 <p class="detail-part-title">商家信息</p>
                 <div class="detail-spacies">
                     <p class="has-icon icon-home">{{restaurantInfo.restaurant_name}}</p>
-                    <p class="has-icon icon-position no-border"><span>{{restaurantInfo.address1}}</span></p>
+                    <p class="has-icon icon-position no-border"><span>{{restaurantInfo.city}}·{{restaurantInfo.address1}}</span></p>
                 </div>
             </div>
             <div class="detail-part">
@@ -200,7 +200,7 @@
             <p class="detail-part-title">商家信息</p>
             <div class="detail-spacies">
                 <p class="has-icon icon-home">{{restaurantInfo.restaurant_name}}</p>
-                <p class="has-icon icon-position"><span>{{restaurantInfo.address1}}</span></p>
+                <p class="has-icon icon-position"><span>{{restaurantInfo.city}}·{{restaurantInfo.address1}}</span></p>
             </div>
         </div>
         <div class="detail-part">
@@ -244,7 +244,7 @@
       <p class="sign-404">--约吧404机动战队</p> -->
     </div>
   </script>
-  <script src="plugins/require.js" data-main="handle/h5"></script>
+  <script src="plugins/require.js" data-main="handle/h5.js?t=123456"></script>
 </body>
 
 </html>
